@@ -12,10 +12,6 @@ class User(db.Model):
     login = db.Column(db.String(50))
     password = db.Column(db.String(100))
 
-class UserTest(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    login = db.Column(db.String(50))
-    password = db.Column(db.String(100))
 
 @app.route('/')
 def hello_world():
