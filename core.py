@@ -72,3 +72,6 @@ def delete_user(id):
     db.session.commit()
 
     return {'message': 'The user has been deleted!'}
+
+if __name__ == '__main__':
+    app.run()
