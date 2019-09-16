@@ -1,6 +1,8 @@
 # pickup-api
 API REST da plataforma Pick-Up
 
+URL: https://pickupbsiapi.herokuapp.com/
+
 # Recursos:
 
 método | endpoint | request | obs:
