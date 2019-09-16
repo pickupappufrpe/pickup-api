@@ -59,3 +59,16 @@ def get_one_user(id):
     user_data['password'] = user.password
 
     return {'user': user_data}
+
+@app.route('/user/<id>', methods=['DELETE'])
+def delete_user(id):
+
+    user = User.query.filter_by(id=id).first()
+
+    if not user:
+        return {'message': 'No user found!'}
+
+    db.session.delete(user)
+    db.session.commit()
+
+    return {'message': 'The user has been deleted!'}
