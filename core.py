@@ -2,6 +2,7 @@ from flask import Flask, request, make_response
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
+from functools import wraps
 import datetime
 import os
 app = Flask(__name__)
@@ -11,10 +12,33 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 
 db = SQLAlchemy(app)
 
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     login = db.Column(db.String(50))
     password = db.Column(db.String(100))
+
+
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = None
+
+        if 'x-access-token' in request.headers:
+            token = request.headers['x-access-token']
+
+        if not token:
+            return {'message': 'Token is missing!'}, 401
+
+        try:
+            data = jwt.decode(token, app.config['SECRET_KEY'])
+            current_user = User.query.filter_by(id=data['id']).first()
+        except:
+            return {'message': 'Token is invalid!'}, 401
+
+        return f(current_user, *args, **kwargs)
+
+    return decorated
 
 
 @app.route('/')
@@ -50,7 +74,8 @@ def get_all_users():
 
 
 @app.route('/user/<id>', methods=['GET'])
-def get_one_user(id):
+@token_required
+def get_one_user(current_user, id):
 
     user = User.query.filter_by(id=id).first()
 
