@@ -1,9 +1,13 @@
-from flask import Flask, request
+from flask import Flask, request, make_response
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
+import jwt
+import datetime
 import os
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+app.config['SECCRET_KEY'] = os.environ.get('SECRET_KEY')
 
 db = SQLAlchemy(app)
 
@@ -21,9 +25,9 @@ def hello_world():
 def create_user():
     data = request.get_json()
 
-    # TODO: senha_criptografada = gerar_senha_criptografada(data['password'])
+    hashed_password = generate_password_hash(data['password'], method='sha256')
 
-    new_user = User(login=data['login'], password=data['password'])
+    new_user = User(login=data['login'], password=hashed_password)
     db.session.add(new_user)
     db.session.commit()
     return {'message': 'New user created!'}
@@ -72,6 +76,25 @@ def delete_user(id):
     db.session.commit()
 
     return {'message': 'The user has been deleted!'}
+
+@app.route('/login')
+def login():
+    auth = request.authorization
+
+    if not auth or not auth.username or not auth.password:
+        return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+
+    user = User.query.filter_by(login=auth.username).first()
+
+    if not user:
+        return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+
+    if check_password_hash(user.password, auth.password):
+        token = jwt.encode({'public_id' : user.id, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
+
+        return {'token' : token.decode('UTF-8')}
+
+    return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
 
 if __name__ == '__main__':
     app.run()
