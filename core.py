@@ -20,6 +20,9 @@ def hello_world():
 @app.route('/user', methods=['POST'])
 def create_user():
     data = request.get_json()
+
+    # TODO: senha_criptografada = gerar_senha_criptografada(data['password'])
+
     new_user = User(login=data['login'], password=data['password'])
     db.session.add(new_user)
     db.session.commit()
@@ -40,3 +43,19 @@ def get_all_users():
         output.append(user_data)
 
     return {'users' : output}
+
+
+@app.route('/user/<id>', methods=['GET'])
+def get_one_user(id):
+
+    user = User.query.filter_by(id=id).first()
+
+    if not user:
+        return {'message' : 'No user found!'}
+
+    user_data = {}
+    user_data['id'] = user.id
+    user_data['name'] = user.login
+    user_data['password'] = user.password
+
+    return {'user': user_data}
