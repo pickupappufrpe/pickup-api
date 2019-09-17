@@ -90,6 +90,7 @@ def get_one_user(current_user, id):
     return {'user': user_data}
 
 @app.route('/user/<id>', methods=['DELETE'])
+@token_required
 def delete_user(id):
 
     user = User.query.filter_by(id=id).first()
