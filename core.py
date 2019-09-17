@@ -57,7 +57,8 @@ def create_user():
     return {'message': 'New user created!'}
 
 @app.route('/user', methods=['GET'])
-def get_all_users():
+@token_required
+def get_all_users(current_user):
     users = User.query.all()
 
     output = []
