@@ -32,11 +32,13 @@ def token_required(f):
 
         try:
             data = jwt.decode(token, app.config['SECRET_KEY'])
-            current_user = User.query.filter_by(id=data['id']).first()
+            if 'id' in data:
+                current_user = User.query.filter_by(id=data['id']).first()
+                return f(current_user, *args, **kwargs)
         except:
             return {'message': 'Token is invalid!'}, 401
 
-        return f(current_user, *args, **kwargs)
+        return f(*args, **kwargs)
 
     return decorated
 
@@ -46,6 +48,7 @@ def hello_world():
     return 'Hello, World!'
 
 @app.route('/user', methods=['POST'])
+@token_required
 def create_user():
     data = request.get_json()
 
@@ -105,6 +108,7 @@ def delete_user(current_user, id):
     return {'message': 'The user has been deleted!'}
 
 @app.route('/login')
+@token_required
 def login():
     auth = request.authorization
 
