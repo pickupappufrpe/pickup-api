@@ -70,7 +70,6 @@ def get_all_users(current_user):
         user_data = {}
         user_data['id'] = user.id
         user_data['login'] = user.login
-        user_data['password'] = user.password
 
         output.append(user_data)
 
