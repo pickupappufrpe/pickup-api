@@ -52,7 +52,7 @@ def hello_world():
 def create_user():
     data = request.get_json()
     search = User.query.filter_by(username=data['login']).first()
-    if search is None:
+    if search == None:
         hashed_password = generate_password_hash(data['password'], method='sha256')
         new_user = User(login=data['login'], password=hashed_password)
         db.session.add(new_user)
