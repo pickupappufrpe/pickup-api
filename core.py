@@ -51,13 +51,15 @@ def hello_world():
 @token_required
 def create_user():
     data = request.get_json()
-
-    hashed_password = generate_password_hash(data['password'], method='sha256')
-
-    new_user = User(login=data['login'], password=hashed_password)
-    db.session.add(new_user)
-    db.session.commit()
-    return {'message': 'New user created!'}
+    search = User.query.filter_by(username=data['login']).first()
+    if search is None:
+        hashed_password = generate_password_hash(data['password'], method='sha256')
+        new_user = User(login=data['login'], password=hashed_password)
+        db.session.add(new_user)
+        db.session.commit()
+        return {'message': 'New user created!'}
+    else:
+        return {'message': 'User already exist!'}
 
 @app.route('/user', methods=['GET'])
 @token_required
