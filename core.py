@@ -88,7 +88,7 @@ def get_one_user(current_user, id):
     user_data = {}
     user_data['id'] = user.id
     user_data['name'] = user.login
-    user_data['password'] = user.password
+
 
     return {'user': user_data}
 
