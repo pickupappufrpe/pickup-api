@@ -13,3 +13,10 @@ método | endpoint | request | obs:
 **get_all_users** | /user | GET |
 **delete_user** | /user/id | DELETE | /user/1
 
+Executando Testes
+python3 -m unittest -v tests
+
+Gerando o banco de dados
+$ python
+> from core import db
+> db.create_all()
