@@ -32,7 +32,7 @@ def token_required(f):
             return {'message': 'Token is missing!'}, 401
 
         try:
-            data = jwt.decode(token, app.config['SECRET_KEY'])
+            data = jwt.decode(token, app.config['SECRET_KEY'], algorithms='HS256')
             if 'id' in data:
                 current_user = User.query.filter_by(id=data['id']).first()
                 return f(current_user, *args, **kwargs)
