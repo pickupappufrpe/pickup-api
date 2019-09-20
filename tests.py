@@ -1,6 +1,9 @@
 from unittest import TestCase
 from flask import url_for
 from core import app
+import jwt
+import string
+import random
 
 
 class RootTests(TestCase):
@@ -18,3 +21,14 @@ class RootTests(TestCase):
     def test_root_deve_retornar_status_code_200(self):
         request = self.client.get(url_for('hello_world'))
         self.assertEqual(200, request.status_code)
+
+    def test_registration(self):
+        expected = 200
+        login = "test_user_" + ''.join(random.choice(string.ascii_letters) for i in range(5))
+        token = jwt.encode({}, app.config['SECRET_KEY'], algorithm='HS256')
+        request = self.client.post(url_for('create_user'),
+                                   json={"login": login, "password": "1234"},
+                                   headers={'x-access-token': token},
+                                   content_type='application/json'
+                                   )
+        self.assertEqual(expected, request.status_code)
