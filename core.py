@@ -154,5 +154,17 @@ def login():
 
     return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
 
+
+@app.route('/user/<id>/person', methods=['POST'])
+@token_required
+def create_person(id):
+    data = request.get_json()
+    user = User.query.filter_by(id=id).first()
+    person = Person(name=data['name'], surname=data['surname'], user=user)
+    db.session.add(person)
+    db.session.commit()
+    return {'message': 'New Person created!'}
+
+
 if __name__ == '__main__':
     app.run()
