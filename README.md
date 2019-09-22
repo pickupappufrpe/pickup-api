@@ -12,7 +12,7 @@ método | endpoint | request | obs:
 **get_one_user** | /user/id | GET | passar token no header 'x-access-token'
 **get_all_users** | /user | GET |
 **delete_user** | /user/id | DELETE | /user/1
-**create_person** | /user/id/person/ POST / {"name":"Chandler", "surname":"Bing"}
+**create_person** | /user/id/person/ | POST / | {"name":"Chandler", "surname":"Bing"}
 
 #### Gerando o banco de dados:
 
