@@ -16,8 +16,31 @@ db = SQLAlchemy(app)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    login = db.Column(db.String(50))
+    username = db.Column(db.String(50))
     password = db.Column(db.String(100))
+    user_type = db.relationship('UserType', backref='user', uselist=False)
+    person = db.relationship('Person', backref='user', uselist=False)
+    contact = db.relationship('Contact', backref='user', uselist=False)
+
+
+class Person(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50))
+    surname = db.Column(db.String(50))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+
+class Contact(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(80))
+    phone = db.Column(db.String(11))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+
+class UserType(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_type = db.Column(db.String(20))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
 def token_required(f):
@@ -52,10 +75,10 @@ def hello_world():
 @token_required
 def create_user():
     data = request.get_json()
-    search = User.query.filter_by(login=data['login']).first()
+    search = User.query.filter_by(username=data['username']).first()
     if search is None:
         hashed_password = generate_password_hash(data['password'], method='sha256')
-        new_user = User(login=data['login'], password=hashed_password)
+        new_user = User(username=data['username'], password=hashed_password)
         db.session.add(new_user)
         db.session.flush()
         new_id = str(new_user.id)
@@ -74,7 +97,7 @@ def get_all_users(current_user):
     for user in users:
         user_data = {}
         user_data['id'] = user.id
-        user_data['login'] = user.login
+        user_data['username'] = user.username
 
         output.append(user_data)
 
@@ -92,7 +115,7 @@ def get_one_user(current_user, id):
 
     user_data = {}
     user_data['id'] = user.id
-    user_data['name'] = user.login
+    user_data['username'] = user.username
 
 
     return {'user': user_data}
