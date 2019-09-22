@@ -31,4 +31,6 @@ class RootTests(TestCase):
                                    headers={'x-access-token': token},
                                    content_type='application/json'
                                    )
+        # print(request.data.decode())
+        # self.assertIn("id", request.data.decode())
         self.assertEqual(expected, request.status_code)

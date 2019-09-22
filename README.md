@@ -7,7 +7,7 @@ URL: https://pickupbsiapi.herokuapp.com/
 
 método | endpoint | request | obs:
 ------------ | ------------- | ------------- | -------------
-**create_user** | /user | POST | {"login": "jose", "password": "123456"}
+**create_user** | /user | POST | {"login": "jose", "password": "123456"} / retorna o id recém criado, "new_user_id"
 **login** | /login | basic auth | retorna um token JWT
 **get_one_user** | /user/id | GET | passar token no header 'x-access-token'
 **get_all_users** | /user | GET |

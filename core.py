@@ -57,8 +57,10 @@ def create_user():
         hashed_password = generate_password_hash(data['password'], method='sha256')
         new_user = User(login=data['login'], password=hashed_password)
         db.session.add(new_user)
+        db.session.flush()
+        new_id = str(new_user.id)
         db.session.commit()
-        return {'message': 'New user created!'}
+        return {'message': 'New user created!', "new_user_id": new_id}
     else:
         return {'message': 'User already exist!'}
 
