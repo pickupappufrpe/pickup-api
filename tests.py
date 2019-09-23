@@ -27,7 +27,7 @@ class RootTests(TestCase):
         login = "test_user_" + ''.join(random.choice(string.ascii_letters) for i in range(5))
         token = jwt.encode({}, app.config['SECRET_KEY'], algorithm='HS256')
         request = self.client.post(url_for('create_user'),
-                                   json={"login": login, "password": "1234"},
+                                   json={"username": login, "password": "1234"},
                                    headers={'x-access-token': token},
                                    content_type='application/json'
                                    )
