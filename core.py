@@ -116,8 +116,9 @@ def get_one_user(current_user, id):
     user_data = {}
     user_data['id'] = user.id
     user_data['username'] = user.username
-
-
+    user_data['group_id'] = user.group_id
+    user_data['person_id'] = user.person_id
+    user_data['contact_id'] = user.contact_id
     return {'user': user_data}
 
 @app.route('/user/<id>', methods=['DELETE'])
@@ -179,6 +180,17 @@ def set_person(id):
     return {'message': "Person has been set!"}
 
 
+@app.route('/user/<id>/person', methods=['GET'])
+@token_required
+def get_person(current_user, id):
+    person = Person.query.filter_by(id=id).first()
+
+    if not person:
+        return {'message': "Person not found!"}
+
+    return {'name': person.name, 'surname': person.surname}
+
+
 @app.route('/contact', methods=['POST'])
 @token_required
 def create_contact():
@@ -201,6 +213,21 @@ def set_contact(id):
     db.session.add(user)
     db.session.commit()
     return {'message': "Contact has been set!"}
+
+
+@app.route('/user/<id>/contact', methods=['GET'])
+@token_required
+def get_contact(current_user, id):
+    contact = Contact.query.filter_by(id=id).first()
+
+    if not contact:
+        return {'message': "Contact not found!"}
+
+    contact_data = {}
+    contact_data['email'] = contact.email
+    contact_data['phone'] = contact.phone
+
+    return contact_data
 
 
 @app.route('/group', methods=['POST'])
