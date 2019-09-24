@@ -15,10 +15,11 @@ db = SQLAlchemy(app)
 
 
 class User(db.Model):
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50))
     password = db.Column(db.String(100))
-    user_type = db.relationship('UserType', backref='user', uselist=False)
+    user_type_id = db.Column(db.Integer, db.ForeignKey('usertype.id'))
     person = db.relationship('Person', backref='user', uselist=False)
     contact = db.relationship('Contact', backref='user', uselist=False)
 
@@ -38,9 +39,10 @@ class Contact(db.Model):
 
 
 class UserType(db.Model):
+    __tablename__ = 'usertype'
     id = db.Column(db.Integer, primary_key=True)
     user_type = db.Column(db.String(20))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    users = db.relationship("User")
 
 
 def token_required(f):
@@ -175,6 +177,15 @@ def create_contact(id):
     db.session.add(contact)
     db.session.commit()
     return {'message': 'New Contact created!'}
+
+
+@app.route('/type', methods=['POST'])
+def create_type():
+    data = request.get_json()
+    user_type = UserType(user_type=data['type'])
+    db.session.add(user_type)
+    db.session.commit()
+    return {'message': "New User Type created!"}
 
 
 if __name__ == '__main__':

@@ -14,6 +14,7 @@ método | endpoint | request | obs:
 **delete_user** | /user/id | DELETE | /user/1
 **create_person** | /user/id/person/ | POST / | {"name":"Chandler", "surname":"Bing"}*
 **create_contact** | /user/id/contact | POST | {"email": "chandler@friends.com", "phone": "55888999999"}*
+**create_type** | /type | POST | {"type":"jogador"}
 
 *com token inicial
 
