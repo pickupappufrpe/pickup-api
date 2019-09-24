@@ -166,5 +166,16 @@ def create_person(id):
     return {'message': 'New Person created!'}
 
 
+@app.route('/user/<id>/contact', methods=['POST'])
+@token_required
+def create_contact(id):
+    data = request.get_json()
+    user = User.query.filter_by(id=id).first()
+    contact = Contact(email=data['email'], phone=data['phone'], user=user)
+    db.session.add(contact)
+    db.session.commit()
+    return {'message': 'New Contact created!'}
+
+
 if __name__ == '__main__':
     app.run()
