@@ -177,13 +177,13 @@ def create_contact(id):
     return {'message': 'New Contact created!'}
 
 
-@app.route('/type', methods=['POST'])
+@app.route('/group', methods=['POST'])
 def create_type():
     data = request.get_json()
-    user_type = Group(group_name=data['type'])
-    db.session.add(user_type)
+    user_group = Group(group_name=data['group'])
+    db.session.add(user_group)
     db.session.commit()
-    return {'message': "New User Type created!"}
+    return {'message': "New User Group created!"}
 
 
 @app.route('/user/<id>/group', methods=['POST'])
