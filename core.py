@@ -19,22 +19,22 @@ class User(db.Model):
     username = db.Column(db.String(50))
     password = db.Column(db.String(100))
     group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
-    person = db.relationship('Person', backref='user', uselist=False)
-    contact = db.relationship('Contact', backref='user', uselist=False)
+    person_id = db.Column(db.Integer, db.ForeignKey('person.id'))
+    contact_id = db.Column(db.Integer, db.ForeignKey('contact.id'))
 
 
 class Person(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
     surname = db.Column(db.String(50))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    users = db.relationship("User")
 
 
 class Contact(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(80))
     phone = db.Column(db.String(11))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    users = db.relationship("User")
 
 
 class Group(db.Model):
@@ -155,38 +155,66 @@ def login():
     return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
 
 
+@app.route('/person', methods=['POST'])
+@token_required
+def create_person():
+    data = request.get_json()
+    person = Person(name=data['name'], surname=data['surname'])
+    db.session.add(person)
+    db.session.flush()
+    new_person_id = str(person.id)
+    db.session.commit()
+    return {'message': 'New Person created!', "person_id": new_person_id}
+
+
 @app.route('/user/<id>/person', methods=['POST'])
 @token_required
-def create_person(id):
+def set_person(id):
     data = request.get_json()
     user = User.query.filter_by(id=id).first()
-    person = Person(name=data['name'], surname=data['surname'], user=user)
-    db.session.add(person)
+    person = Person.query.filter_by(id=data['person_id']).first()
+    user.person_id = person.id
+    db.session.add(user)
     db.session.commit()
-    return {'message': 'New Person created!'}
+    return {'message': "Person has been set!"}
+
+
+@app.route('/contact', methods=['POST'])
+@token_required
+def create_contact():
+    data = request.get_json()
+    contact = Contact(email=data['email'], phone=data['phone'])
+    db.session.add(contact)
+    db.session.flush()
+    new_contact_id = str(contact.id)
+    db.session.commit()
+    return {'message': 'New Contact created!', "contact_id": new_contact_id}
 
 
 @app.route('/user/<id>/contact', methods=['POST'])
 @token_required
-def create_contact(id):
+def set_contact(id):
     data = request.get_json()
     user = User.query.filter_by(id=id).first()
-    contact = Contact(email=data['email'], phone=data['phone'], user=user)
-    db.session.add(contact)
+    contact = Contact.query.filter_by(id=data['contact_id']).first()
+    user.contact_id = contact.id
+    db.session.add(user)
     db.session.commit()
-    return {'message': 'New Contact created!'}
+    return {'message': "Contact has been set!"}
 
 
 @app.route('/group', methods=['POST'])
-def create_type():
+@token_required
+def create_group():
     data = request.get_json()
-    user_group = Group(group_name=data['group'])
+    user_group = Group(group_name=data['group_name'])
     db.session.add(user_group)
     db.session.commit()
     return {'message': "New User Group created!"}
 
 
 @app.route('/user/<id>/group', methods=['POST'])
+@token_required
 def set_group(id):
     data = request.get_json()
     user = User.query.filter_by(id=id).first()
