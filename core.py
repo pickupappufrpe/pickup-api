@@ -15,11 +15,10 @@ db = SQLAlchemy(app)
 
 
 class User(db.Model):
-    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50))
     password = db.Column(db.String(100))
-    user_type_id = db.Column(db.Integer, db.ForeignKey('usertype.id'))
+    group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
     person = db.relationship('Person', backref='user', uselist=False)
     contact = db.relationship('Contact', backref='user', uselist=False)
 
@@ -38,10 +37,9 @@ class Contact(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
-class UserType(db.Model):
-    __tablename__ = 'usertype'
+class Group(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_type = db.Column(db.String(20))
+    group_name = db.Column(db.String(20))
     users = db.relationship("User")
 
 
@@ -182,10 +180,21 @@ def create_contact(id):
 @app.route('/type', methods=['POST'])
 def create_type():
     data = request.get_json()
-    user_type = UserType(user_type=data['type'])
+    user_type = Group(group_name=data['type'])
     db.session.add(user_type)
     db.session.commit()
     return {'message': "New User Type created!"}
+
+
+@app.route('/user/<id>/group', methods=['POST'])
+def set_group(id):
+    data = request.get_json()
+    user = User.query.filter_by(id=id).first()
+    group = Group.query.filter_by(group_name=data['group']).first()
+    user.group_id = group.id
+    db.session.add(user)
+    db.session.commit()
+    return {'message': 'User Group has been set!'}
 
 
 if __name__ == '__main__':
