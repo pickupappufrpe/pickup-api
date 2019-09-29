@@ -272,5 +272,50 @@ def set_group(id):
     return {'message': 'User Group has been set!'}
 
 
+@app.route('/address', methods=['POST'])
+@token_required
+def create_address(current_user):
+    data = request.get_json()
+    address = Address(street=data['street'],
+                      number=data['number'],
+                      neighborhood=data['neighborhood'],
+                      city=data['city'],
+                      state=data['state'])
+    db.session.add(address)
+    db.session.flush()
+    new_address_id = str(address.id)
+    db.session.commit()
+    return {'message': 'New Address created!', "address_id": new_address_id}
+
+
+@app.route('/spot/<id>/address', methods=['POST'])
+@token_required
+def set_address(current_user, id):
+    data = request.get_json()
+    spot = Spot.query.filter_by(id=id).first()
+    address = Address.query.filter_by(id=data['address_id']).first()
+    spot.address = address.id
+    db.session.add(spot)
+    db.session.commit()
+    return {'message': "Address has been set!"}
+
+
+@app.route('/user/<id>/address', methods=['GET'])
+@token_required
+def get_address(current_user, id):
+    user = User.query.filter_by(id=id).first()
+
+    if not user:
+        return {'message': "Contact not found!"}
+
+    address = user.address
+
+    return {'street': address.street,
+            'number': address.number,
+            'neighborhood': address.neighborhood,
+            'city': address.city,
+            'state': address.state}
+
+
 if __name__ == '__main__':
     app.run()
