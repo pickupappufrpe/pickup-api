@@ -300,15 +300,18 @@ def set_address(current_user, id):
     return {'message': "Address has been set!"}
 
 
-@app.route('/user/<id>/address', methods=['GET'])
+@app.route('/spot/<id>/address', methods=['GET'])
 @token_required
 def get_address(current_user, id):
-    user = User.query.filter_by(id=id).first()
+    spot = Spot.query.filter_by(id=id).first()
 
-    if not user:
-        return {'message': "Contact not found!"}
+    if not spot:
+        return {'message': "Spot not found!"}
 
-    address = user.address
+    address = Address.query.filter_by(id=spot.address_id)
+
+    if not address:
+        return {'message': "Address not found!"}
 
     return {'street': address.street,
             'number': address.number,
