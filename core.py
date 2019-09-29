@@ -320,5 +320,19 @@ def get_address(current_user, id):
             'state': address.state}
 
 
+@app.route('/spot', methods=['POST'])
+@token_required
+def create_spot(current_user):
+    data = request.get_json()
+    spot = Spot(owner_id=current_user.id,
+                name=data['name'])
+
+    db.session.add(spot)
+    db.session.flush()
+    new_spot_id = str(spot.id)
+    db.session.commit()
+    return {'message': 'New Spot created!', "spot_id": new_spot_id}
+
+
 if __name__ == '__main__':
     app.run()
