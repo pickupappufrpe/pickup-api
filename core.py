@@ -326,7 +326,6 @@ def create_spot(current_user):
     data = request.get_json()
     spot = Spot(owner_id=current_user.id,
                 name=data['name'])
-
     db.session.add(spot)
     db.session.flush()
     new_spot_id = str(spot.id)
