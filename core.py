@@ -35,6 +35,7 @@ class Contact(db.Model):
     email = db.Column(db.String(80))
     phone = db.Column(db.String(11))
     users = db.relationship("User")
+    spots = db.relationship("Spot")
 
 
 class Group(db.Model):
@@ -50,6 +51,14 @@ class Address(db.Model):
     neighborhood = db.Column(db.String(30))
     city = db.Column(db.String(20))
     state = db.Column(db.String(20))
+    spots = db.relationship("Spot")
+
+
+class Spot(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30))
+    address_id = db.Column(db.Integer, db.ForeignKey('address.id'))
+    contact_id = db.Column(db.Integer, db.ForeignKey('contact.id'))
 
 
 def token_required(f):
