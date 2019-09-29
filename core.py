@@ -43,6 +43,15 @@ class Group(db.Model):
     users = db.relationship("User")
 
 
+class Address(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    street = db.Column(db.String(50))
+    number = db.Column(db.Integer, primary_key=True)
+    neighborhood = db.Column(db.String(30))
+    city = db.Column(db.String(20))
+    state = db.Column(db.String(20))
+
+
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
