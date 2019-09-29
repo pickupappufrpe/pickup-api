@@ -21,13 +21,14 @@ class User(db.Model):
     group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
     person_id = db.Column(db.Integer, db.ForeignKey('person.id'))
     contact_id = db.Column(db.Integer, db.ForeignKey('contact.id'))
+    spots = db.relationship("Spot")
 
 
 class Person(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
     surname = db.Column(db.String(50))
-    users = db.relationship("User")
+    users = db.relationship("User", uselist=False)
 
 
 class Contact(db.Model):
@@ -41,7 +42,7 @@ class Contact(db.Model):
 class Group(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     group_name = db.Column(db.String(20))
-    users = db.relationship("User")
+    users = db.relationship("User", uselist=False)
 
 
 class Address(db.Model):
@@ -51,12 +52,13 @@ class Address(db.Model):
     neighborhood = db.Column(db.String(30))
     city = db.Column(db.String(20))
     state = db.Column(db.String(20))
-    spots = db.relationship("Spot")
+    spots = db.relationship("Spot", uselist=False)
 
 
 class Spot(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30))
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     address_id = db.Column(db.Integer, db.ForeignKey('address.id'))
     contact_id = db.Column(db.Integer, db.ForeignKey('contact.id'))
 
