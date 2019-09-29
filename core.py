@@ -48,7 +48,7 @@ class Group(db.Model):
 class Address(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     street = db.Column(db.String(50))
-    number = db.Column(db.Integer, primary_key=True)
+    number = db.Column(db.Integer)
     neighborhood = db.Column(db.String(30))
     city = db.Column(db.String(20))
     state = db.Column(db.String(20))
