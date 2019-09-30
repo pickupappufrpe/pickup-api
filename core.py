@@ -79,8 +79,8 @@ def token_required(f):
             if 'id' in data:
                 current_user = User.query.filter_by(id=data['id']).first()
                 return f(current_user, *args, **kwargs)
-        except:
-            return {'message': 'Token is invalid!'}, 401
+        except Exception as e:
+            return {'message': str(e.with_traceback())}, 401
 
         return f(*args, **kwargs)
 
@@ -178,7 +178,7 @@ def login():
 
 @app.route('/person', methods=['POST'])
 @token_required
-def create_person():
+def create_person(current_user):
     data = request.get_json()
     person = Person(name=data['name'], surname=data['surname'])
     db.session.add(person)
@@ -190,7 +190,7 @@ def create_person():
 
 @app.route('/user/<id>/person', methods=['POST'])
 @token_required
-def set_person(id):
+def set_person(current_user, id):
     data = request.get_json()
     user = User.query.filter_by(id=id).first()
     person = Person.query.filter_by(id=data['person_id']).first()
@@ -308,16 +308,16 @@ def get_address(current_user, id):
     if not spot:
         return {'message': "Spot not found!"}
 
-    address = Address.query.filter_by(id=spot.address_id)
+    address = Address.query.filter_by(id=str(spot.address_id))
 
     if not address:
         return {'message': "Address not found!"}
 
-    return {'street': address.street,
-            'number': address.number,
-            'neighborhood': address.neighborhood,
-            'city': address.city,
-            'state': address.state}
+    return {'street': str(address.street),
+            'number': str(address.number),
+            'neighborhood': str(address.neighborhood),
+            'city': str(address.city),
+            'state': str(address.state)}
 
 
 @app.route('/spot', methods=['POST'])
