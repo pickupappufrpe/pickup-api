@@ -203,7 +203,9 @@ def set_person(current_user, id):
 @app.route('/user/<id>/person', methods=['GET'])
 @token_required
 def get_person(current_user, id):
-    person = Person.query.filter_by(id=id).first()
+    user = User.query.filter_by(id=id).first()
+
+    person = Person.query.filter_by(id=user.person_id).first()
 
     if not person:
         return {'message': "Person not found!"}
@@ -213,7 +215,7 @@ def get_person(current_user, id):
 
 @app.route('/contact', methods=['POST'])
 @token_required
-def create_contact():
+def create_contact(current_user):
     data = request.get_json()
     contact = Contact(email=data['email'], phone=data['phone'])
     db.session.add(contact)
@@ -238,16 +240,13 @@ def set_contact(id):
 @app.route('/user/<id>/contact', methods=['GET'])
 @token_required
 def get_contact(current_user, id):
-    contact = Contact.query.filter_by(id=id).first()
+    user = User.query.filter_by(id=id).first()
+    contact = Contact.query.filter_by(id=user.contact_id).first()
 
     if not contact:
         return {'message': "Contact not found!"}
 
-    contact_data = {}
-    contact_data['email'] = contact.email
-    contact_data['phone'] = contact.phone
-
-    return contact_data
+    return {'email': contact.email, 'phone': contact.phone}
 
 
 @app.route('/group', methods=['POST'])
@@ -308,7 +307,7 @@ def get_address(current_user, id):
     if not spot:
         return {'message': "Spot not found!"}
 
-    address = Address.query.filter_by(id=str(spot.address_id))
+    address = Address.query.filter_by(id=str(spot.address_id)).first()
 
     if not address:
         return {'message': "Address not found!"}
