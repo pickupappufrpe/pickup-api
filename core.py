@@ -288,13 +288,13 @@ def create_address(current_user):
     return {'message': 'New Address created!', "address_id": new_address_id}
 
 
-@app.route('/spot/<id>/address', methods=['POST'])
+@app.route('/spot/<id>/address', methods=['PUT'])
 @token_required
 def set_address(current_user, id):
     data = request.get_json()
     spot = Spot.query.filter_by(id=id).first()
     address = Address.query.filter_by(id=data['address_id']).first()
-    spot.address = address.id
+    spot.address_id = address.id
     db.session.add(spot)
     db.session.commit()
     return {'message': "Address has been set!"}
