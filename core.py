@@ -178,7 +178,7 @@ def login():
 
 @app.route('/person', methods=['POST'])
 @token_required
-def create_person(current_user):
+def create_person():
     data = request.get_json()
     person = Person(name=data['name'], surname=data['surname'])
     db.session.add(person)
@@ -190,7 +190,7 @@ def create_person(current_user):
 
 @app.route('/user/<id>/person', methods=['POST'])
 @token_required
-def set_person(current_user, id):
+def set_person(id):
     data = request.get_json()
     user = User.query.filter_by(id=id).first()
     person = Person.query.filter_by(id=data['person_id']).first()
