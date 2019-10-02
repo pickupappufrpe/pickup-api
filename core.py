@@ -215,7 +215,7 @@ def get_person(current_user, id):
 
 @app.route('/contact', methods=['POST'])
 @token_required
-def create_contact(current_user):
+def create_contact():
     data = request.get_json()
     contact = Contact(email=data['email'], phone=data['phone'])
     db.session.add(contact)
@@ -251,11 +251,12 @@ def get_contact(current_user, id):
 
 @app.route('/group', methods=['POST'])
 @token_required
-def create_group():
+def create_group():  # TODO: ask current user
     data = request.get_json()
     user_group = Group(group_name=data['group_name'])
     db.session.add(user_group)
     db.session.commit()
+    # TODO: return new group id
     return {'message': "New User Group created!"}
 
 
@@ -287,7 +288,7 @@ def create_address(current_user):
     return {'message': 'New Address created!', "address_id": new_address_id}
 
 
-@app.route('/spot/<id>/address', methods=['PUT'])
+@app.route('/spot/<id>/address', methods=['POST'])
 @token_required
 def set_address(current_user, id):
     data = request.get_json()
@@ -324,7 +325,7 @@ def get_address(current_user, id):
 def create_spot(current_user):
     data = request.get_json()
     spot = Spot(owner_id=current_user.id,
-                name=data['name'])
+                name=data['spot_name'])
     db.session.add(spot)
     db.session.flush()
     new_spot_id = str(spot.id)
