@@ -20,6 +20,19 @@ método | endpoint | request | obs:
 **get_contact** | /user/id/contact | GET |  **
 **create_group** | /group | POST | {"group_name":"jogador"}
 **set_group** | /user/id/group | POST | {"group":"jogador"}*
+**create_address** | /address | POST | {"street":"Baker", "number":"221", "neighborhood":"Marylebone"}**
+**set_address** | /spot/id/address | POST | {"address_id":"1"}**
+**get_address** | /spot/id/address | GET | **
+**create_spot** | /spot | POST | {"spot_name": "Ilha do Retiro"}**
+**set_spot_contact** | /spot/id/contact | POST | {"group":"jogador"}**
+**create_state** | /state | POST | {"state_name":"Pernambuco"}**
+**create_city** | /city | POST | {"city_name":"Recife"}**
+**set_state** | /city/id/state | POST | {"state_name":"Bahia"}**
+**set_city** | /address/id/city | POST | {"city_id":"5"}**
+**get_city** | /city/id | GET | **
+**get_state** | /state/id | GET | **
+**get_all_cities** | /city | GET | **
+**get_all_states** | /state | GET | **
 
 Passar token no header 'x-access-token'
 

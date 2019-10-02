@@ -415,7 +415,7 @@ def get_city(current_user, id):
 
 @app.route('/state/<id>', methods=['GET'])
 @token_required
-def get_city(current_user, id):
+def get_state(current_user, id):
     state = State.query.filter_by(id=id).first()
     if not state:
         return {'message': 'No city found!'}
