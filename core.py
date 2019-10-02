@@ -50,8 +50,7 @@ class Address(db.Model):
     street = db.Column(db.String(50))
     number = db.Column(db.Integer)
     neighborhood = db.Column(db.String(30))
-    city = db.Column(db.String(20))
-    state = db.Column(db.String(20))
+    city_id = db.Column(db.Integer, db.ForeignKey('city.id'))
     spots = db.relationship("Spot", uselist=False)
 
 
@@ -61,6 +60,19 @@ class Spot(db.Model):
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     address_id = db.Column(db.Integer, db.ForeignKey('address.id'))
     contact_id = db.Column(db.Integer, db.ForeignKey('contact.id'))
+
+
+class State(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30))
+    cities = db.relationship("City")
+
+
+class City(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30))
+    state_id = db.Column(db.Integer, db.ForeignKey('state.id'))
+    addresses = db.relationship("Address")
 
 
 def token_required(f):
@@ -278,9 +290,8 @@ def create_address(current_user):
     data = request.get_json()
     address = Address(street=data['street'],
                       number=data['number'],
-                      neighborhood=data['neighborhood'],
-                      city=data['city'],
-                      state=data['state'])
+                      neighborhood=data['neighborhood']
+                      )
     db.session.add(address)
     db.session.flush()
     new_address_id = str(address.id)
@@ -316,8 +327,8 @@ def get_address(current_user, id):
     return {'street': str(address.street),
             'number': str(address.number),
             'neighborhood': str(address.neighborhood),
-            'city': str(address.city),
-            'state': str(address.state)}
+            'city': str(address.city_id),
+            }
 
 
 @app.route('/spot', methods=['POST'])
@@ -343,6 +354,109 @@ def set_spot_contact(current_user, id):
     db.session.add(spot)
     db.session.commit()
     return {'message': 'Contact has been set!'}
+
+
+@app.route('/state', methods=['POST'])
+@token_required
+def create_state(current_user):
+    data = request.get_json()
+    new_state = State(name=data['state_name'])
+    db.session.add(new_state)
+    db.session.flush()
+    new_state_id = new_state.id
+    db.session.commit()
+    return {'message': 'New state created!', "new_state_id": str(new_state_id)}
+
+
+@app.route('/city', methods=['POST'])
+@token_required
+def create_city(current_user):
+    data = request.get_json()
+    new_city = City(name=data['city_name'])
+    db.session.add(new_city)
+    db.session.flush()
+    new_city_id = new_city.id
+    db.session.commit()
+    return {'message': 'New city created!', "new_city_id": str(new_city_id)}
+
+
+@app.route('/city/<id>/state', methods=['POST'])
+@token_required
+def set_state(current_user, id):
+    data = request.get_json()
+    city = City.query.filter_by(id=id).first()
+    state = State.query.filter_by(name=data['state_name']).first()
+    city.state_id = state.id
+    db.session.add(city)
+    db.session.commit()
+    return {'message': 'State has been set!'}
+
+
+@app.route('/address/<id>/city', methods=['POST'])
+@token_required
+def set_city(current_user, id):
+    data = request.get_json()
+    address = Address.query.filter_by(id=id).first()
+    city = City.query.filter_by(id=data['city_id']).first()
+    address.city_id = city.id
+    db.session.add(address)
+    db.session.commit()
+    return {'message': 'City has been set!'}
+
+
+@app.route('/city/<id>', methods=['GET'])
+@token_required
+def get_city(current_user, id):
+    city = City.query.filter_by(id=id).first()
+    if not city:
+        return {'message': 'No city found!'}
+    return {'city_name': city.name, 'state_id': str(city.state_id)}
+
+
+@app.route('/state/<id>', methods=['GET'])
+@token_required
+def get_city(current_user, id):
+    state = State.query.filter_by(id=id).first()
+    if not state:
+        return {'message': 'No city found!'}
+    return {'state_name': state.name}
+
+
+@app.route('/city', methods=['GET'])
+@token_required
+def get_all_cities(current_user):
+    cities = City.query.all()
+
+    output = []
+
+    for city in cities:
+        city_data = {
+                     'id': city.id,
+                     'name': city.name,
+                     'state_id': city.state_id
+                     }
+
+        output.append(city_data)
+
+    return {'cities': output}
+
+
+@app.route('/state', methods=['GET'])
+@token_required
+def get_all_states(current_user):
+    states = State.query.all()
+
+    output = []
+
+    for state in states:
+        state_data = {
+                     'id': state.id,
+                     'name': state.name
+                     }
+
+        output.append(state_data)
+
+    return {'states': output}
 
 
 if __name__ == '__main__':
