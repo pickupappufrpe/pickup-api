@@ -333,5 +333,17 @@ def create_spot(current_user):
     return {'message': 'New Spot created!', "spot_id": new_spot_id}
 
 
+@app.route('/spot/<id>/contact', methods=['POST'])
+@token_required
+def set_spot_contact(current_user, id):
+    data = request.get_json()
+    spot = Spot.query.filter_by(id=id).first()
+    contact = Contact.query.filter_by(id=data['contact_id']).first()
+    spot.contact_id = contact.id
+    db.session.add(spot)
+    db.session.commit()
+    return {'message': 'Contact has been set!'}
+
+
 if __name__ == '__main__':
     app.run()
