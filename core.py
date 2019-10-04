@@ -48,6 +48,7 @@ class Group(db.Model):
 class Address(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     street = db.Column(db.String(50))
+    cep = db.Column(db.String(8))
     number = db.Column(db.Integer)
     neighborhood = db.Column(db.String(30))
     city_id = db.Column(db.Integer, db.ForeignKey('city.id'))
@@ -290,7 +291,8 @@ def create_address(current_user):
     data = request.get_json()
     address = Address(street=data['street'],
                       number=data['number'],
-                      neighborhood=data['neighborhood']
+                      neighborhood=data['neighborhood'],
+                      cep=data['cep']
                       )
     db.session.add(address)
     db.session.flush()
@@ -328,6 +330,7 @@ def get_address(current_user, id):
             'number': str(address.number),
             'neighborhood': str(address.neighborhood),
             'city': str(address.city_id),
+            'cep': address.cep
             }
 
 
