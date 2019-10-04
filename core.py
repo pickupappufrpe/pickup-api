@@ -273,6 +273,20 @@ def create_group():  # TODO: ask current user
     return {'message': "New User Group created!"}
 
 
+@app.route('/group', methods=['GET'])
+@token_required
+def get_all_groups(current_user):
+    groups = Group.query.all()
+
+    output = []
+
+    for group in groups:
+        group_data = {'id': group.id, 'group_name': group.name}
+        output.append(group_data)
+
+    return {'groups': output}
+
+
 @app.route('/user/<id>/group', methods=['POST'])
 @token_required
 def set_group(id):
