@@ -45,8 +45,20 @@ class RootTests(TestCase):
         # print('Base: ', base)
         request = self.client.get(url_for('login'),
                                   json={},
-                                  headers={'x-access-token': self.token, 'Authorization': 'Basic ' + base},
+                                  headers={'x-access-token': self.token,
+                                           'Authorization': 'Basic ' + base},
                                   content_type='application/json'
                                   )
         self.token = request.data.decode('UTF-8')[10:-3]
         self.assertEqual(200, request.status_code)
+
+    def test_create_person(self):
+        expected = 200
+        token = jwt.encode({}, app.config['SECRET_KEY'], algorithm='HS256')
+        request = self.client.post(url_for('create_person'),
+                                   json={"name": "Chandler",
+                                         "surname": "Bing"},
+                                   headers={'x-access-token': token},
+                                   content_type='application/json'
+                                   )
+        self.assertEqual(expected, request.status_code)
