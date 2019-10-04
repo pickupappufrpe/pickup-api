@@ -281,7 +281,7 @@ def get_all_groups(current_user):
     output = []
 
     for group in groups:
-        group_data = {'id': group.id, 'group_name': group.name}
+        group_data = {'id': group.id, 'group_name': group.group_name}
         output.append(group_data)
 
     return {'groups': output}
