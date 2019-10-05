@@ -19,6 +19,7 @@ método | endpoint | request | obs:
 **set_contact** | /user/id/contact | POST | {"contact_id":"1"}*
 **get_contact** | /user/id/contact | GET |  **
 **create_group** | /group | POST | {"group_name":"jogador"}
+**get_all_groups** | /group | GET | **
 **set_group** | /user/id/group | POST | {"group":"jogador"}*
 **create_address** | /address | POST | {"street":"Baker", "number":"221", "neighborhood":"Marylebone"}**
 **set_address** | /spot/id/address | POST | {"address_id":"1"}**
