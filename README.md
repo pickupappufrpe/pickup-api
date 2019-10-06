@@ -15,6 +15,7 @@ método | endpoint | request | obs:
 **create_person** | /person | POST | {"name":"Chandler", "surname":"Bing"}* (retorna "person_id" que foi criado)*
 **set_person** | /user/id/person | POST | {"person_id":"1"}*
 **get_person** | /user/id/person | GET | **
+**get_all_persons** | /person | GET | **
 **create_contact** | /contact | POST | {"email": "chandler@friends.com", "phone": "55888999999"}* (retorna "contact_id" que foi criado)
 **set_contact** | /user/id/contact | POST | {"contact_id":"1"}*
 **get_contact** | /user/id/contact | GET |  **

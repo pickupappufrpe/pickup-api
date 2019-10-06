@@ -226,6 +226,23 @@ def get_person(current_user, id):
     return {'name': person.name, 'surname': person.surname}
 
 
+@app.route('/person', methods=['GET'])
+@token_required
+def get_all_persons(current_user):
+    persons = Person.query.all()
+
+    output = []
+
+    for person in persons:
+        person_data = {'id': person.id,
+                       'name': person.name,
+                       'surname': person.surname}
+
+        output.append(person_data)
+
+    return {'persons': output}
+
+
 @app.route('/contact', methods=['POST'])
 @token_required
 def create_contact():
