@@ -14,8 +14,7 @@ class RootTests(TestCase):
         self.app_context = self.app.test_request_context()
         self.app_context.push()
         self.client = self.app.test_client()
-        # self.username = "test_user_" + ''.join(random.choice(string.ascii_letters) for i in range(5))
-        self.username = "abacate"
+        self.username = "test_user_" + ''.join(random.choice(string.ascii_letters) for i in range(5))
         self.password = "1234567890"
         self.token = jwt.encode({}, app.config['SECRET_KEY'], algorithm='HS256')
 
