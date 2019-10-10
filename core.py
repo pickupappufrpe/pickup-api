@@ -299,7 +299,6 @@ def create_group():  # TODO: ask current user
 
 
 @app.route('/group', methods=['GET'])
-@token_required
 def get_all_groups(current_user):
     groups = Group.query.all()
 
