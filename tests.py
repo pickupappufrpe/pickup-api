@@ -18,11 +18,11 @@ class RootTests(TestCase):
         self.password = "1234567890"
         self.token = jwt.encode({}, app.config['SECRET_KEY'], algorithm='HS256')
 
-    def test_root_deve_retornar_hello_world(self):
+    def test_root_must_return_hello_world(self):
         request = self.client.get(url_for('hello_world'))
         self.assertEqual('Hello, World!', request.data.decode())
 
-    def test_root_deve_retornar_status_code_200(self):
+    def test_root__must_code_200(self):
         request = self.client.get(url_for('hello_world'))
         self.assertEqual(200, request.status_code)
 
@@ -32,16 +32,13 @@ class RootTests(TestCase):
                                    json={"username": self.username, "password": self.password},
                                    headers={'x-access-token': self.token},
                                    content_type='application/json'
-                                  )
-        # print(request.data.decode())
-        # self.assertIn("id", request.data.decode())
+                                   )
         self.assertEqual(expected, request.status_code)
 
     def test_login(self):
         expected = 200
         data = self.username + ":" + self.password
         base = base64.urlsafe_b64encode(data.encode('UTF-8')).decode('ascii')
-        # print('Base: ', base)
         request = self.client.get(url_for('login'),
                                   json={},
                                   headers={'x-access-token': self.token,
@@ -49,7 +46,7 @@ class RootTests(TestCase):
                                   content_type='application/json'
                                   )
         self.token = request.data.decode('UTF-8')[10:-3]
-        self.assertEqual(200, request.status_code)
+        self.assertEqual(expected, request.status_code)
 
     def test_create_person(self):
         expected = 200
