@@ -8,12 +8,12 @@ URL: https://pickupbsiapi.herokuapp.com/
 método | endpoint | request | obs:
 ------------ | ------------- | ------------- | -------------
 **create_user** | /user | POST | {"username": "chandler", "password": "123456"} / retorna o id recém criado, "new_user_id"
-**login** | /login | GET | basic auth / retorna um token JWT
+**login** | /login | GET | basic auth / enviar: {"user_group":"2"}. Retorna um token JWT
 **get_one_user** | /user/id | GET | **
 **get_all_users** | /user | GET | **
 **delete_user** | /user/id | DELETE | /user/1
 **create_person** | /person | POST | {"name":"Chandler", "surname":"Bing"}* (retorna "person_id" que foi criado)*
-**set_person** | /user/id/person | POST | {"person_id":"1"}*
+**set_person** | /user/id/person | POST | {"person_id":"1"}
 **get_person** | /user/id/person | GET | **
 **get_all_persons** | /person | GET | **
 **create_contact** | /contact | POST | {"email": "chandler@friends.com", "phone": "55888999999"}* (retorna "contact_id" que foi criado)
@@ -21,7 +21,7 @@ método | endpoint | request | obs:
 **get_contact** | /user/id/contact | GET |  **
 **create_group** | /group | POST | {"group_name":"jogador"}
 **get_all_groups** | /group | GET | **
-**set_group** | /user/id/group | POST | {"group":"jogador"}*
+**set_group** | /user/id/group | POST | {"group":"jogador"}
 **create_address** | /address | POST | {"street":"Baker", "number":"221", "neighborhood":"Marylebone"}**
 **set_address** | /spot/id/address | POST | {"address_id":"1"}**
 **get_address** | /spot/id/address | GET | **
