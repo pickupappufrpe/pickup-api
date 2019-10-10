@@ -27,6 +27,9 @@ método | endpoint | request | obs:
 **get_address** | /spot/id/address | GET | **
 **create_spot** | /spot | POST | {"spot_name": "Ilha do Retiro"}**
 **set_spot_contact** | /spot/id/contact | POST | {"group":"jogador"}**
+**get_spot_by_id** | /spot/id | GET | **
+**get_my_spots** | /spot/my | GET | retorna os espaços do proprietário logado**
+**get_all_spots** | /spot | GET | retorna todos os espaços**
 **create_state** | /state | POST | {"state_name":"Pernambuco"}**
 **create_city** | /city | POST | {"city_name":"Recife"}**
 **set_state** | /city/id/state | POST | {"state_name":"Bahia"}**

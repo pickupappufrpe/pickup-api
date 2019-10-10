@@ -396,6 +396,59 @@ def set_spot_contact(current_user, id):
     return {'message': 'Contact has been set!'}
 
 
+@app.route('/spot/<id>', methods=['GET'])
+@token_required
+def get_spot_by_id(current_user, id):
+    spot = Spot.query.filter_by(id=id).first()
+
+    if not spot:
+        return {'message': 'Spot not found!'}
+
+    return {'id': spot.id,
+            'name': spot.name,
+            'owner_id': spot.owner_id,
+            'contact_id': spot.contact_id
+            }
+
+
+@app.route('/spot/my', methods=['GET'])
+@token_required
+def get_my_spots(current_user):
+    spots = Spot.query.filter_by(owner_id=current_user.id)
+
+    output = []
+
+    for spot in spots:
+        spot_data = {'id': spot.id,
+                     'name': spot.name,
+                     'owner_id': spot.owner_id,
+                     'contact_id': spot.contact_id
+                     }
+
+        output.append(spot_data)
+
+    return {'spots': output}
+
+
+@app.route('/spot', methods=['GET'])
+@token_required
+def get_all_spots(current_user):
+    spots = Spot.query.all()
+
+    output = []
+
+    for spot in spots:
+        spot_data = {'id': spot.id,
+                     'name': spot.name,
+                     'owner_id': spot.owner_id,
+                     'contact_id': spot.contact_id
+                     }
+
+        output.append(spot_data)
+
+    return {'spots': output}
+
+
 @app.route('/state', methods=['POST'])
 @token_required
 def create_state(current_user):
