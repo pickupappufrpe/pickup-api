@@ -104,8 +104,8 @@ def token_required(f):
 def hello_world():
     return 'Hello, World!'
 
+
 @app.route('/user', methods=['POST'])
-@token_required
 def create_user():
     data = request.get_json()
     search = User.query.filter_by(username=data['username']).first()
@@ -119,6 +119,7 @@ def create_user():
         return {'message': 'New user created!', "new_user_id": new_id}
     else:
         return {'message': 'User already exist!'}
+
 
 @app.route('/user', methods=['GET'])
 @token_required
@@ -154,6 +155,7 @@ def get_one_user(current_user, id):
     user_data['contact_id'] = user.contact_id
     return {'user': user_data}
 
+
 @app.route('/user/<id>', methods=['DELETE'])
 @token_required
 def delete_user(current_user, id):
@@ -168,8 +170,8 @@ def delete_user(current_user, id):
 
     return {'message': 'The user has been deleted!'}
 
+
 @app.route('/login')
-@token_required
 def login():
     auth = request.authorization
 
@@ -190,7 +192,6 @@ def login():
 
 
 @app.route('/person', methods=['POST'])
-@token_required
 def create_person():
     data = request.get_json()
     person = Person(name=data['name'], surname=data['surname'])
@@ -202,7 +203,6 @@ def create_person():
 
 
 @app.route('/user/<id>/person', methods=['POST'])
-@token_required
 def set_person(id):
     data = request.get_json()
     user = User.query.filter_by(id=id).first()
@@ -305,7 +305,6 @@ def get_all_groups(current_user):
 
 
 @app.route('/user/<id>/group', methods=['POST'])
-@token_required
 def set_group(id):
     data = request.get_json()
     user = User.query.filter_by(id=id).first()
