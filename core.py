@@ -184,7 +184,7 @@ def login():
     if not user:
         return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
 
-    if user.group_id != int(asked_group):
+    if user.group_id != asked_group:
         return {'message': "Wrong user group!"}
 
     if check_password_hash(user.password, auth.password):
