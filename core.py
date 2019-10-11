@@ -175,7 +175,7 @@ def delete_user(current_user, id):
 def login():
     auth = request.authorization
     data = request.get_json()
-    asked_group = data['user_group']
+    # asked_group = data['user_group']
     if not auth or not auth.username or not auth.password:
         return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
 
@@ -184,8 +184,8 @@ def login():
     if not user:
         return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
 
-    if user.group_id != int(asked_group):
-        return {'message': "Wrong user group!"}
+    # if user.group_id != int(asked_group):
+    #     return {'message': "Wrong user group!"}
 
     if check_password_hash(user.password, auth.password):
         token = jwt.encode({
