@@ -156,6 +156,22 @@ def get_one_user(current_user, id):
     return {'user': user_data}
 
 
+@app.route('/user/<username>', methods=['GET'])
+def get_user_by_username(username):
+
+    user = User.query.filter_by(username=username).first()
+
+    if not user:
+        return {'message': 'No user found!'}
+
+    return {'id': user.id,
+            'username': user.username,
+            'group_id': user.group_id,
+            'person_id': user.person_id,
+            'contact_id': user.contact_id
+            }
+
+
 @app.route('/user/<id>', methods=['DELETE'])
 @token_required
 def delete_user(current_user, id):
