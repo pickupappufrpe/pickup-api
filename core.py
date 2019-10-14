@@ -5,7 +5,10 @@ import jwt
 from functools import wraps
 import datetime
 import os
+from userRoutes import user
 app = Flask(__name__)
+
+app.register_blueprint(user)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
@@ -103,88 +106,6 @@ def token_required(f):
 @app.route('/')
 def hello_world():
     return 'Hello, World!'
-
-
-@app.route('/user', methods=['POST'])
-def create_user():
-    data = request.get_json()
-    search = User.query.filter_by(username=data['username']).first()
-    if search is None:
-        hashed_password = generate_password_hash(data['password'], method='sha256')
-        new_user = User(username=data['username'], password=hashed_password)
-        db.session.add(new_user)
-        db.session.flush()
-        new_id = str(new_user.id)
-        db.session.commit()
-        return {'message': 'New user created!', "new_user_id": new_id}
-    else:
-        return {'message': 'User already exist!'}
-
-
-@app.route('/user', methods=['GET'])
-@token_required
-def get_all_users(current_user):
-    users = User.query.all()
-
-    output = []
-
-    for user in users:
-        user_data = {}
-        user_data['id'] = user.id
-        user_data['username'] = user.username
-
-        output.append(user_data)
-
-    return {'users' : output}
-
-
-@app.route('/user/<id>', methods=['GET'])
-@token_required
-def get_one_user(current_user, id):
-
-    user = User.query.filter_by(id=id).first()
-
-    if not user:
-        return {'message' : 'No user found!'}
-
-    user_data = {}
-    user_data['id'] = user.id
-    user_data['username'] = user.username
-    user_data['group_id'] = user.group_id
-    user_data['person_id'] = user.person_id
-    user_data['contact_id'] = user.contact_id
-    return {'user': user_data}
-
-
-@app.route('/user/<username>', methods=['GET'])
-def get_user_by_username(username):
-
-    user = User.query.filter_by(username=username).first()
-
-    if not user:
-        return {'message': 'No user found!'}
-
-    return {'id': user.id,
-            'username': user.username,
-            'group_id': user.group_id,
-            'person_id': user.person_id,
-            'contact_id': user.contact_id
-            }
-
-
-@app.route('/user/<id>', methods=['DELETE'])
-@token_required
-def delete_user(current_user, id):
-
-    user = User.query.filter_by(id=id).first()
-
-    if not user:
-        return {'message': 'No user found!'}
-
-    db.session.delete(user)
-    db.session.commit()
-
-    return {'message': 'The user has been deleted!'}
 
 
 @app.route('/login')
