@@ -14,7 +14,7 @@ class RootTests(TestCase):
         self.app_context = self.app.test_request_context()
         self.app_context.push()
         self.client = self.app.test_client()
-        self.username = "test_user_" + ''.join(random.choice(string.ascii_letters) for i in range(5))
+        self.username = "test_user"
         self.password = "1234567890"
         self.token = jwt.encode({}, app.config['SECRET_KEY'], algorithm='HS256')
 
@@ -26,7 +26,7 @@ class RootTests(TestCase):
         request = self.client.get(url_for('hello_world'))
         self.assertEqual(200, request.status_code)
 
-    def test_registration(self):
+    def test_a_registration(self):
         expected = 200
         request = self.client.post(url_for('create_user'),
                                    json={"username": self.username, "password": self.password},
@@ -35,7 +35,7 @@ class RootTests(TestCase):
                                    )
         self.assertEqual(expected, request.status_code)
 
-    def test_login(self):
+    def test_b_login(self):
         expected = 200
         data = self.username + ":" + self.password
         base = base64.urlsafe_b64encode(data.encode('UTF-8')).decode('ascii')
