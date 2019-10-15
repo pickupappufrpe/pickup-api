@@ -29,7 +29,7 @@ def get_user_by_id(current_user, user_id):
     target = User.query.filter_by(id=user_id).first()
 
     if not target:
-        return {'message': 'No user found!'}
+        return {'message': 'No user found! BLASH'}
 
     user_data = {
                  'id': target.id,
@@ -41,8 +41,9 @@ def get_user_by_id(current_user, user_id):
     return {'user': user_data}
 
 
-@user.route('/user/<username>', methods=['GET'])
+@user.route('/user/username/<username>', methods=['GET'])
 def get_user_by_username(username):
+    username = str(username)
     target = User.query.filter_by(username=username).first()
 
     if not target:
