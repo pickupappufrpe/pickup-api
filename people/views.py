@@ -1,11 +1,10 @@
-from flask import request, Blueprint
-from control import token_required
+from . import person
 
-person_bp = Blueprint('person', __name__)
-from core import db, User, Person
+from core import db, User, Person, token_required
+from flask import request
 
 
-@person_bp.route('/person', methods=['POST'])
+@person.route('/person', methods=['POST'])
 def create_person():
     data = request.get_json()
     result = Person(name=data['name'], surname=data['surname'])
@@ -16,7 +15,7 @@ def create_person():
     return {'message': 'New Person created!', "person_id": new_person_id}
 
 
-@person_bp.route('/user/<user_id>/person', methods=['POST'])
+@person.route('/user/<user_id>/person', methods=['POST'])
 def set_person(user_id):
     data = request.get_json()
     user = User.query.filter_by(id=user_id).first()
@@ -27,7 +26,7 @@ def set_person(user_id):
     return {'message': "Person has been set!"}
 
 
-@person_bp.route('/user/<user_id>/person', methods=['GET'])
+@person.route('/user/<user_id>/person', methods=['GET'])
 @token_required
 def get_person(current_user, user_id):
     user = User.query.filter_by(id=user_id).first()
@@ -40,7 +39,7 @@ def get_person(current_user, user_id):
     return {'name': target.name, 'surname': target.surname}
 
 
-@person_bp.route('/person', methods=['GET'])
+@person.route('/person', methods=['GET'])
 @token_required
 def get_all_people(current_user):
     people = Person.query.all()

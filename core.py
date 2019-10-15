@@ -5,21 +5,12 @@ import jwt
 from functools import wraps
 import datetime
 import os
-from views.user import user_bp
-from views.person import person_bp
-# from control import token_required
-from models import *
 
 app = Flask(__name__)
-
-app.register_blueprint(user_bp)
-app.register_blueprint(person_bp)
-
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['DEBUG'] = True
-
 db = SQLAlchemy(app)
 
 
@@ -84,6 +75,7 @@ class City(db.Model):
     state_id = db.Column(db.Integer, db.ForeignKey('state.id'))
     addresses = db.relationship("Address")
 
+
 @app.route('/')
 def hello_world():
     return 'Hello, World!'
@@ -111,6 +103,13 @@ def token_required(f):
         return f(*args, **kwargs)
 
     return decorated
+
+
+from users import user as user_bp
+app.register_blueprint(user_bp)
+
+from people import person as person_bp
+app.register_blueprint(person_bp)
 
 
 @app.route('/login', methods=['GET'])

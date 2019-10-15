@@ -1,12 +1,12 @@
-from flask import request, Blueprint
+from . import user
+
+from flask import request
 from werkzeug.security import generate_password_hash
-from control import token_required
-
-user_bp = Blueprint('user', __name__)
-from models import *
+# from control import token_required
+from core import User, db, token_required
 
 
-@user_bp.route('/user', methods=['POST'])
+@user.route('/user', methods=['POST'])
 def create_user():
     data = request.get_json()
     search = User.query.filter_by(username=data['username']).first()
@@ -22,7 +22,7 @@ def create_user():
         return {'message': 'User already exist!'}
 
 
-@user_bp.route('/user/<user_id>', methods=['GET'])
+@user.route('/user/<user_id>', methods=['GET'])
 @token_required
 def get_user_by_id(current_user, user_id):
 
@@ -41,7 +41,7 @@ def get_user_by_id(current_user, user_id):
     return {'user': user_data}
 
 
-@user_bp.route('/user/<username>', methods=['GET'])
+@user.route('/user/<username>', methods=['GET'])
 def get_user_by_username(username):
     target = User.query.filter_by(username=username).first()
 
@@ -56,7 +56,7 @@ def get_user_by_username(username):
             }
 
 
-@user_bp.route('/user', methods=['GET'])
+@user.route('/user', methods=['GET'])
 @token_required
 def get_all_users(current_user):
     users = User.query.all()
@@ -74,7 +74,7 @@ def get_all_users(current_user):
     return {'users': output}
 
 
-@user_bp.route('/user/<user_id>', methods=['DELETE'])
+@user.route('/user/<user_id>', methods=['DELETE'])
 @token_required
 def delete_user(current_user, user_id):
 
