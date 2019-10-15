@@ -5,13 +5,15 @@ import jwt
 from functools import wraps
 import datetime
 import os
-from views.user import user
-from views.person import person
+from views.user import user_bp
+from views.person import person_bp
+# from control import token_required
+from models import *
 
 app = Flask(__name__)
 
-app.register_blueprint(user)
-app.register_blueprint(person)
+app.register_blueprint(user_bp)
+app.register_blueprint(person_bp)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
@@ -82,6 +84,10 @@ class City(db.Model):
     state_id = db.Column(db.Integer, db.ForeignKey('state.id'))
     addresses = db.relationship("Address")
 
+@app.route('/')
+def hello_world():
+    return 'Hello, World!'
+
 
 def token_required(f):
     @wraps(f)
@@ -105,11 +111,6 @@ def token_required(f):
         return f(*args, **kwargs)
 
     return decorated
-
-
-@app.route('/')
-def hello_world():
-    return 'Hello, World!'
 
 
 @app.route('/login', methods=['GET'])
@@ -138,58 +139,6 @@ def login():
         return {'token': token.decode('UTF-8')}
 
     return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
-
-
-@app.route('/person', methods=['POST'])
-def create_person():
-    data = request.get_json()
-    person = Person(name=data['name'], surname=data['surname'])
-    db.session.add(person)
-    db.session.flush()
-    new_person_id = str(person.id)
-    db.session.commit()
-    return {'message': 'New Person created!', "person_id": new_person_id}
-
-
-@app.route('/user/<id>/person', methods=['POST'])
-def set_person(id):
-    data = request.get_json()
-    user = User.query.filter_by(id=id).first()
-    person = Person.query.filter_by(id=data['person_id']).first()
-    user.person_id = person.id
-    db.session.add(user)
-    db.session.commit()
-    return {'message': "Person has been set!"}
-
-
-@app.route('/user/<id>/person', methods=['GET'])
-@token_required
-def get_person(current_user, id):
-    user = User.query.filter_by(id=id).first()
-
-    person = Person.query.filter_by(id=user.person_id).first()
-
-    if not person:
-        return {'message': "Person not found!"}
-
-    return {'name': person.name, 'surname': person.surname}
-
-
-@app.route('/person', methods=['GET'])
-@token_required
-def get_all_persons(current_user):
-    persons = Person.query.all()
-
-    output = []
-
-    for person in persons:
-        person_data = {'id': person.id,
-                       'name': person.name,
-                       'surname': person.surname}
-
-        output.append(person_data)
-
-    return {'persons': output}
 
 
 @app.route('/contact', methods=['POST'])
