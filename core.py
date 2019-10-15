@@ -1,18 +1,22 @@
 from flask import Flask, request, make_response
 from flask_sqlalchemy import SQLAlchemy
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import check_password_hash
 import jwt
 from functools import wraps
 import datetime
 import os
-from userRoutes import user
+from views.user import user
+from views.person import person
+
 app = Flask(__name__)
 
 app.register_blueprint(user)
+app.register_blueprint(person)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['DEBUG'] = True
 
 db = SQLAlchemy(app)
 
@@ -108,25 +112,25 @@ def hello_world():
     return 'Hello, World!'
 
 
-@app.route('/login')
+@app.route('/login', methods=['GET'])
 def login():
     auth = request.authorization
-    data = request.get_json()
+    # data = request.get_json()
     # asked_group = data['user_group']
     if not auth or not auth.username or not auth.password:
         return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
 
-    user = User.query.filter_by(username=auth.username).first()
+    result = User.query.filter_by(username=auth.username).first()
 
-    if not user:
+    if not result:
         return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
 
     # if user.group_id != int(asked_group):
     #     return {'message': "Wrong user group!"}
 
-    if check_password_hash(user.password, auth.password):
+    if check_password_hash(result.password, auth.password):
         token = jwt.encode({
-                            'id': str(user.id),
+                            'id': str(result.id),
                             'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
                             },
                            app.config['SECRET_KEY'])

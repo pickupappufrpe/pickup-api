@@ -9,9 +9,10 @@ método | endpoint | request | obs:
 ------------ | ------------- | ------------- | -------------
 **create_user** | /user | POST | {"username": "chandler", "password": "123456"} / retorna o id recém criado, "new_user_id"
 **login** | /login | GET | basic auth / enviar: {"user_group":"2"}. Retorna um token JWT
-**get_one_user** | /user/id | GET | **
+**get_user_by_id** | /user/<user_id> | GET | **
+**get_user_by_username** | /user/<username> | GET | **
 **get_all_users** | /user | GET | **
-**delete_user** | /user/id | DELETE | /user/1
+**delete_user** | /user/<user_id> | DELETE | /user/1
 **create_person** | /person | POST | {"name":"Chandler", "surname":"Bing"}* (retorna "person_id" que foi criado)*
 **set_person** | /user/id/person | POST | {"person_id":"1"}
 **get_person** | /user/id/person | GET | **
