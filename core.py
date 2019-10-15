@@ -110,6 +110,9 @@ app.register_blueprint(user_bp)
 from people import person as person_bp
 app.register_blueprint(person_bp)
 
+from contacts import contact as contact_bp
+app.register_blueprint(contact_bp)
+
 
 @app.route('/login', methods=['GET'])
 def login():
@@ -137,42 +140,6 @@ def login():
         return {'token': token.decode('UTF-8')}
 
     return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
-
-
-@app.route('/contact', methods=['POST'])
-@token_required
-def create_contact():
-    data = request.get_json()
-    contact = Contact(email=data['email'], phone=data['phone'])
-    db.session.add(contact)
-    db.session.flush()
-    new_contact_id = str(contact.id)
-    db.session.commit()
-    return {'message': 'New Contact created!', "contact_id": new_contact_id}
-
-
-@app.route('/user/<id>/contact', methods=['POST'])
-@token_required
-def set_contact(id):
-    data = request.get_json()
-    user = User.query.filter_by(id=id).first()
-    contact = Contact.query.filter_by(id=data['contact_id']).first()
-    user.contact_id = contact.id
-    db.session.add(user)
-    db.session.commit()
-    return {'message': "Contact has been set!"}
-
-
-@app.route('/user/<id>/contact', methods=['GET'])
-@token_required
-def get_contact(current_user, id):
-    user = User.query.filter_by(id=id).first()
-    contact = Contact.query.filter_by(id=user.contact_id).first()
-
-    if not contact:
-        return {'message': "Contact not found!"}
-
-    return {'email': contact.email, 'phone': contact.phone}
 
 
 @app.route('/group', methods=['POST'])
