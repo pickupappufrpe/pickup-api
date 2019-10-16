@@ -113,6 +113,9 @@ app.register_blueprint(person_bp)
 from contacts import contact as contact_bp
 app.register_blueprint(contact_bp)
 
+from groups import group as group_bp
+app.register_blueprint(group_bp)
+
 
 @app.route('/login', methods=['GET'])
 def login():
@@ -140,41 +143,6 @@ def login():
         return {'token': token.decode('UTF-8')}
 
     return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
-
-
-@app.route('/group', methods=['POST'])
-@token_required
-def create_group():  # TODO: ask current user
-    data = request.get_json()
-    user_group = Group(group_name=data['group_name'])
-    db.session.add(user_group)
-    db.session.commit()
-    # TODO: return new group id
-    return {'message': "New User Group created!"}
-
-
-@app.route('/group', methods=['GET'])
-def get_all_groups(current_user):
-    groups = Group.query.all()
-
-    output = []
-
-    for group in groups:
-        group_data = {'id': group.id, 'group_name': group.group_name}
-        output.append(group_data)
-
-    return {'groups': output}
-
-
-@app.route('/user/<id>/group', methods=['POST'])
-def set_group(id):
-    data = request.get_json()
-    user = User.query.filter_by(id=id).first()
-    group = Group.query.filter_by(group_name=data['group']).first()
-    user.group_id = group.id
-    db.session.add(user)
-    db.session.commit()
-    return {'message': 'User Group has been set!'}
 
 
 @app.route('/address', methods=['POST'])
