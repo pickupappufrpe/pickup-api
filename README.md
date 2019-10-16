@@ -24,19 +24,19 @@ método | endpoint | request | obs:
 **get_all_groups** | /group | GET | **
 **set_group** | /user/<user_id>/group | POST | {"group":"jogador"}
 **create_address** | /address | POST | {"street":"Baker", "number":"221", "neighborhood":"Marylebone"}**
-**set_address** | /spot/id/address | POST | {"address_id":"1"}**
-**get_address** | /spot/id/address | GET | **
+**set_address** | /spot/<address_id>/address | POST | {"address_id":"1"}**
+**get_address** | /spot/<spot_id>/address | GET | **
 **create_spot** | /spot | POST | {"spot_name": "Ilha do Retiro"}**
 **set_spot_contact** | /spot/id/contact | POST | {"group":"jogador"}**
-**get_spot_by_id** | /spot/id | GET | **
+**get_spot_by_id** | /spot/<spot_id> | GET | **
 **get_my_spots** | /spot/my | GET | retorna os espaços do proprietário logado**
 **get_all_spots** | /spot | GET | retorna todos os espaços**
 **create_state** | /state | POST | {"state_name":"Pernambuco"}**
 **create_city** | /city | POST | {"city_name":"Recife"}**
-**set_state** | /city/id/state | POST | {"state_name":"Bahia"}**
-**set_city** | /address/id/city | POST | {"city_id":"5"}**
-**get_city** | /city/id | GET | **
-**get_state** | /state/id | GET | **
+**set_state** | /city/<state_id>/state | POST | {"state_name":"Bahia"}**
+**set_city** | /address/<address_id>/city | POST | {"city_id":"5"}**
+**get_city** | /city/<city_id> | GET | **
+**get_state** | /state/<state_id> | GET | **
 **get_all_cities** | /city | GET | **
 **get_all_states** | /state | GET | **
 
