@@ -1,6 +1,6 @@
 from . import spot
 
-from core import db, Spot, Address, Contact, token_required
+from core import db, Spot, Address, City, Contact, token_required, State
 from flask import request
 
 
@@ -16,10 +16,10 @@ def set_address(current_user, spot_id):
     return {'message': "Address has been set!"}
 
 
-@spot.route('/spot/<spot_id>/address', methods=['GET'])
+@spot.route('/spot/<spot_id>/address', methods=['GET'])  # TODO: transferir para o pacote 'addresses'
 @token_required
 def get_address(current_user, spot_id):
-    target = Spot.query.filter_by(id=id).first()
+    target = Spot.query.filter_by(id=spot_id).first()
 
     if not target:
         return {'message': "Spot not found!"}
@@ -29,10 +29,15 @@ def get_address(current_user, spot_id):
     if not address:
         return {'message': "Address not found!"}
 
-    return {'street': str(address.street),
-            'number': str(address.number),
-            'neighborhood': str(address.neighborhood),
-            'city': str(address.city_id),
+    city = City.query.filter_by(id=address.city_id).first()
+    state = State.query.filter_by(id=city.state_id).first()
+
+    return {
+            'street': address.street,
+            'number': address.number,
+            'neighborhood': address.neighborhood,
+            'city': city.name,
+            'state': state.name,
             'cep': address.cep
             }
 
