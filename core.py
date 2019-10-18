@@ -135,12 +135,11 @@ app.register_blueprint(spot_bp)
 @app.route('/login', methods=['GET'])
 def login():
     auth = request.authorization
-    data = request.get_json()
-    asked_group = data['user_group']
+    asked_group = request.args.get("user_group")
     if not auth or not auth.username or not auth.password:
         return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
 
-    result = User.query.filter_by(username=auth.username, id_group= asked_group).first()
+    result = User.query.filter_by(username=auth.username, group_id= asked_group).first()
 
     if not result:
         return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
