@@ -39,6 +39,10 @@ método | endpoint | request | obs:
 **get_state** | /state/<state_id> | GET | **
 **get_all_cities** | /city | GET | **
 **get_all_states** | /state | GET | **
+**save_spot_photo** | /spot/<spot_id>/photo | POST | **
+**get_spot_photo** | /spot/<spot_id>/photo | GET | **
+**save_user_photo** | /user/<user_id>/photo | POST | **
+**get_user_photo** | /user/<user_id>/photo | GET | **
 
 Passar token no header 'x-access-token'
 

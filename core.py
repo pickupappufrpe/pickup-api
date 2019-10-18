@@ -21,6 +21,7 @@ class User(db.Model):
     person_id = db.Column(db.Integer, db.ForeignKey('person.id'))
     contact_id = db.Column(db.Integer, db.ForeignKey('contact.id'))
     spots = db.relationship("Spot")
+    photos = db.relationship("Photo")
 
 
 class Person(db.Model):
@@ -60,6 +61,7 @@ class Spot(db.Model):
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     address_id = db.Column(db.Integer, db.ForeignKey('address.id'))
     contact_id = db.Column(db.Integer, db.ForeignKey('contact.id'))
+    photos = db.relationship("Photo")
 
 
 class State(db.Model):
@@ -73,6 +75,13 @@ class City(db.Model):
     name = db.Column(db.String(30))
     state_id = db.Column(db.Integer, db.ForeignKey('state.id'))
     addresses = db.relationship("Address")
+
+
+class Photo(db.model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    spot_id = db.Column(db.Integer, db.ForeignKey('spot.id'))
+    image = db.Column(db.LargeBinary)
 
 
 @app.route('/')
