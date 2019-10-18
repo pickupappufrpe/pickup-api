@@ -77,7 +77,7 @@ class City(db.Model):
     addresses = db.relationship("Address")
 
 
-class Photo(db.model):
+class Photo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     spot_id = db.Column(db.Integer, db.ForeignKey('spot.id'))
