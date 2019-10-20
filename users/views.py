@@ -3,7 +3,7 @@ from . import user
 from flask import request
 from werkzeug.security import generate_password_hash
 # from control import token_required
-from core import User, db, token_required
+from core import User, Person, db, token_required
 
 
 @user.route('/user', methods=['POST'])
@@ -88,3 +88,13 @@ def delete_user(current_user, user_id):
     db.session.commit()
 
     return {'message': 'The user has been deleted!'}
+
+
+@user.route('/user/full/<user_id>', methods=['GET'])
+def get_user(user_id):
+    target = db.session.query(User).join(Person, User.person_id == Person.id)
+
+    if not target:
+        return {'message': 'Sorry!'}
+
+    return{'result': target}
