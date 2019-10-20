@@ -91,16 +91,17 @@ def delete_user(current_user, user_id):
 
 
 @user.route('/user/full/<user_id>', methods=['GET'])
+@token_required
 def get_user(user_id):
-    target = db.session.query(User).join(Person, User.person_id == Person.id).first()
+    target = db.session.query(
+                              User.username,
+                              Person.name,
+                              Person.surname
+                              ).join(Person, User.id == user_id).first()
 
     if not target:
         return {'message': 'Sorry!'}
 
-    return {'id': target.id,
-            'username': target.username,
-            'group_id': target.group_id,
-            'person_id': target.name,
-            'contact_id': target.surname
-            }
-
+    return {'username': target.username,
+            'name': target.name,
+            'surname': target.surname}
