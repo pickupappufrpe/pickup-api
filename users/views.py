@@ -97,4 +97,10 @@ def get_user(user_id):
     if not target:
         return {'message': 'Sorry!'}
 
-    return{'result': target}
+    return {'id': target.id,
+            'username': target.username,
+            'group_id': target.group_id,
+            'person_id': target.name,
+            'contact_id': target.surname
+            }
+
