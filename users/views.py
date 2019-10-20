@@ -96,11 +96,12 @@ def delete_user(current_user, user_id):
 @user.route('/user/full/<user_id>', methods=['GET'])
 @token_required
 def get_user(user_id):
+    id = user_id
     target = db.session.query(
                               User.username,
                               Person.name,
                               Person.surname
-                              ).join(User).join(Person, Person.id == User.person_id).filter(User.id == user_id).first()
+                              ).join(User).join(Person, Person.id == User.person_id).filter(User.id == id).first()
 
     if not target:
         return {'message': 'Sorry!'}
