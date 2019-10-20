@@ -131,6 +131,9 @@ app.register_blueprint(address_bp)
 from spots import spot as spot_bp
 app.register_blueprint(spot_bp)
 
+from photos import photo as photo_bp
+app.register_blueprint(photo_bp)
+
 
 @app.route('/login', methods=['GET'])
 def login():
