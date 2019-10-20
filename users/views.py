@@ -11,8 +11,11 @@ def create_user():
     data = request.get_json()
     search = User.query.filter_by(username=data['username']).first()
     if search is None:
+        new_person = Person(name = data['name'], surname = data['surname'])
+        db.session.add(new_person)
+        db.session.flush()
         hashed_password = generate_password_hash(data['password'], method='sha256')
-        new_user = User(username=data['username'], password=hashed_password)
+        new_user = User(username=data['username'], password=hashed_password, person_id = new_person.id, group_id = data['group'])
         db.session.add(new_user)
         db.session.flush()
         new_id = str(new_user.id)
@@ -97,7 +100,7 @@ def get_user(user_id):
                               User.username,
                               Person.name,
                               Person.surname
-                              ).join(Person, User.id == user_id).first()
+                              ).join(User).join(Person, Person.id == User.person_id).first()
 
     if not target:
         return {'message': 'Sorry!'}
