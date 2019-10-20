@@ -92,7 +92,7 @@ def delete_user(current_user, user_id):
 
 @user.route('/user/full/<user_id>', methods=['GET'])
 def get_user(user_id):
-    target = db.session.query(User).join(Person, User.person_id == Person.id)
+    target = db.session.query(User).join(Person, User.person_id == Person.id).first()
 
     if not target:
         return {'message': 'Sorry!'}
