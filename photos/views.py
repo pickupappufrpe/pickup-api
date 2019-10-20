@@ -39,7 +39,7 @@ def save_user_photo(current_user):
 
 @photo.route('/user/<user_id>/photo', methods=['GET'])
 @token_required
-def get_spot_photo(current_user, user_id):
+def get_user_photo(current_user, user_id):
     target = Photo.query.filter_by(user_id=user_id).first()
 
     if not target:
