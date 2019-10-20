@@ -10,6 +10,7 @@ Flask = "*"
 flask-sqlalchemy = "*"
 psycopg2-binary = "*"
 pyjwt = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.7"
