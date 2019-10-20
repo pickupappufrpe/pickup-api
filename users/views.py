@@ -101,7 +101,7 @@ def get_user(user_id):
                               User.username,
                               Person.name,
                               Person.surname
-                              ).join(User).join(Person, Person.id == User.person_id).filter(User.id == id).first()
+                              ).join(User, User.id == id).join(Person, Person.id == User.person_id).first()
 
     if not target:
         return {'message': 'Sorry!'}
