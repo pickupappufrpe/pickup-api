@@ -58,6 +58,8 @@ def create_spot(current_user):
     db.session.add(new_address)
     db.session.flush()
     new_contact = Contact(email = data['email'], phone = data['telefone'])
+    db.session.add(new_contact)
+    db.session.flush()
     new_spot = Spot(owner_id=current_user.id,
                     name=data['spot_name'],
                     address_id = new_address.id,
