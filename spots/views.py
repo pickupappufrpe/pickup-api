@@ -46,8 +46,20 @@ def get_address(current_user, spot_id):
 @token_required
 def create_spot(current_user):
     data = request.get_json()
+    city = City.query.filter_by(name=data['cidade']).first()
+    state = State.query.filter_by(name=data['estado']).first()
+    new_address = Address(street = data['street'],
+                          cep = data['cep'],
+                          number = data['numero'],
+                          neighborhood = data['bairro'],
+                          city_id = city.id,
+                          state_id = state.id
+                          )
+    db.session.add(new_address)
+    db.session.flush()
     new_spot = Spot(owner_id=current_user.id,
-                    name=data['spot_name'])
+                    name=data['spot_name'],
+                    )
     db.session.add(new_spot)
     db.session.flush()
     new_spot_id = str(new_spot.id)

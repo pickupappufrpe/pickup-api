@@ -52,6 +52,7 @@ class Address(db.Model):
     number = db.Column(db.Integer)
     neighborhood = db.Column(db.String(30))
     city_id = db.Column(db.Integer, db.ForeignKey('city.id'))
+    state_id = db.Column(db.Integer, db.ForeignKey('state.id'))
     spots = db.relationship("Spot", uselist=False)
 
 
