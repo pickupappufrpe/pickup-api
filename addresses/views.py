@@ -8,14 +8,13 @@ from flask import request
 @token_required
 def create_address(current_user):
     data = request.get_json()
-    address = Address(street=data['street'],
-                      number=data['number'],
-                      neighborhood=data['neighborhood'],
-                      cep=data['cep']
-                      )
-    db.session.add(address)
+    target = Address(street=data['street'],
+                     number=data['number'],
+                     neighborhood=data['neighborhood'],
+                     cep=data['cep'])
+    db.session.add(target)
     db.session.flush()
-    new_address_id = str(address.id)
+    new_address_id = str(target.id)
     db.session.commit()
     return {'message': 'New Address created!', "address_id": new_address_id}
 
