@@ -1,26 +1,22 @@
 from . import user
 
 from flask import request
-from werkzeug.security import generate_password_hash
-# from control import token_required
-from core import User, Person, db, token_required
+from core import db, User, token_required
+from .controls import signup_query, get_user_by_id_query
 
 
-@user.route('/user', methods=['POST'])
-def create_user():
+@user.route('/signup', methods=['POST'])
+def signup():
     data = request.get_json()
     search = User.query.filter_by(username=data['username']).first()
     if search is None:
-        new_person = Person(name = data['name'], surname = data['surname'])
-        db.session.add(new_person)
-        db.session.flush()
-        hashed_password = generate_password_hash(data['password'], method='sha256')
-        new_user = User(username=data['username'], password=hashed_password, person_id = new_person.id, group_id = data['group'])
-        db.session.add(new_user)
-        db.session.flush()
-        new_id = str(new_user.id)
-        db.session.commit()
-        return {'message': 'New user created!', "new_user_id": new_id}
+        new_user_id = signup_query(data['username'],
+                                   data['password'],
+                                   data['name'],
+                                   data['surname'],
+                                   data['group_id'])
+
+        return {'message': 'New user created!', "new_user_id": new_user_id}
     else:
         return {'message': 'User already exist!'}
 
@@ -28,20 +24,13 @@ def create_user():
 @user.route('/user/<user_id>', methods=['GET'])
 @token_required
 def get_user_by_id(current_user, user_id):
+    target = get_user_by_id_query(user_id)
 
-    target = User.query.filter_by(id=user_id).first()
-
-    if not target:
-        return {'message': 'No user found! BLASH'}
-
-    user_data = {
-                 'id': target.id,
-                 'username': target.username,
-                 'group_id': target.group_id,
-                 'person_id': target.person_id,
-                 'contact_id': target.contact_id
-                 }
-    return {'user': user_data}
+    return {'username': target.username,
+            'name': target.name,
+            'surname': target.surname,
+            'group_id': target.group_id
+            }
 
 
 @user.route('/user/username/<username>', methods=['GET'])
@@ -81,7 +70,6 @@ def get_all_users(current_user):
 @user.route('/user/<user_id>', methods=['DELETE'])
 @token_required
 def delete_user(current_user, user_id):
-
     target = User.query.filter_by(id=user_id).first()
 
     if not target:
@@ -91,18 +79,3 @@ def delete_user(current_user, user_id):
     db.session.commit()
 
     return {'message': 'The user has been deleted!'}
-
-
-@user.route('/user/full/<user_id>', methods=['GET'])
-@token_required
-def get_user(current_user, user_id):
-    target = User.query.join(Person, Person.id == User.person_id).\
-    add_columns(Person.name,Person.surname,User.username).\
-    filter(User.id == user_id).filter(Person.id == User.person_id).first()
-
-    if not target:
-        return {'message': 'Sorry!'}
-
-    return {'username': target.username,
-            'name': target.name,
-            'surname': target.surname}
