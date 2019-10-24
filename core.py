@@ -86,6 +86,23 @@ class Photo(db.Model):
     image = db.Column(db.LargeBinary)
 
 
+class Schedule(db.Model):
+    schedule_id = db.Column(db.Integer, primary_key=True)
+    spot_id = db.Column(db.Integer, db.ForeignKey('spot.id'))
+    week_day = db.Column(db.Integer)
+    opening_time = db.Column(db.Time)
+    closing_time = db.Column(db.Time)
+
+
+class Booking(db.Model):
+    booking_id = db.Column(db.Integer, primary_key=True)
+    day = db.Column(db.Date)
+    start_time = db.Column(db.Time)
+    end_time = db.Column(db.Time)
+    spot_id = db.Column(db.Integer, db.ForeignKey('spot.id'))
+    customer_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+
 @app.route('/')
 def hello_world():
     return 'Hello, World!'
