@@ -1,5 +1,14 @@
 from . import schedule
 
 from flask import request
-from core import db, Schedule, Spot, User
+from .controls import add_schedule_query
+
+@schedule.route('/schedule', methods=['POST'])
+def add_schedule():
+    data = request.get_json()
+    if add_schedule_query(data['spot_id'],
+                          data['week_day'],
+                          data['opening_time'],
+                          data['closing_time'])
+        return {'message': 'Schedule added!'}
 
