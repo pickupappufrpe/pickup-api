@@ -1,7 +1,7 @@
 from . import schedule
 
 from flask import request
-from core import token_required
+from core import token_required, Schedule
 from .controls import add_schedule_query
 
 
@@ -15,3 +15,44 @@ def add_schedule(current_user):
                           data['closing_time']):
         return {'message': 'Schedule added!'}
 
+
+@schedule.route('/spot/schedule', methods=['GET'])
+@token_required
+def get_all_spots(current_user):
+    schedules = Schedule.query.all()
+
+    output = []
+
+    for s in schedules:
+        schedules_data = {
+            'schedule_id': s.schedule_id,
+            'spot_id': s.spot_id,
+            'week_day': s.week_day,
+            'opening_time': s.opening_time,
+            'closing_time': s.closing_time
+        }
+
+        output.append(schedules_data)
+
+    return {'schedules': output}
+
+
+@schedule.route('/spot/schedule/<spot_id>', methods=['GET'])
+@token_required
+def get_spots_schedules(current_user, spot_id):
+    schedules = Schedule.query.filter_by(spot_id=spot_id)
+
+    output = []
+
+    for s in schedules:
+        schedules_data = {
+            'schedule_id': s.schedule_id,
+            'spot_id': s.spot_id,
+            'week_day': s.week_day,
+            'opening_time': s.opening_time,
+            'closing_time': s.closing_time
+        }
+
+        output.append(schedules_data)
+
+    return {'schedules': output}

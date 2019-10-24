@@ -1,7 +1,7 @@
 from . import booking
 
 from flask import request
-from core import token_required
+from core import token_required, Booking, User
 from .controls import add_booking_query
 
 
@@ -15,3 +15,23 @@ def add_booking(current_user):
                          data['spot_id'],
                          current_user.id):
         return {'message': 'Booking saved!'}
+
+
+@booking.route('/spot/booking/', methods=['GET'])
+@token_required
+def get_all_bookings(current_user):
+    bookings = Booking.query.all()
+
+    output = []
+
+    for b in bookings:
+        bookings_data = {
+            'day': b.day,
+            'spot_id': b.spot_id,
+            'start_time': b.start_time,
+            'end_time': b.end_time,
+        }
+
+        output.append(bookings_data)
+
+    return {'bookings': output}
