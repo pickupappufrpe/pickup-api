@@ -7,7 +7,7 @@ from .controls import add_schedule_query
 
 @schedule.route('/schedule', methods=['POST'])
 @token_required
-def add_schedule():
+def add_schedule(current_user):
     data = request.get_json()
     if add_schedule_query(data['spot_id'],
                           data['week_day'],
