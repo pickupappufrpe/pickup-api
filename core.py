@@ -153,6 +153,9 @@ app.register_blueprint(spot_bp)
 from photos import photo as photo_bp
 app.register_blueprint(photo_bp)
 
+from schedules import schedule as schedule_bp
+app.register_blueprint(schedule_bp)
+
 
 @app.route('/login', methods=['GET'])
 def login():
