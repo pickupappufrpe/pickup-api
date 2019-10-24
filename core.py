@@ -156,6 +156,9 @@ app.register_blueprint(photo_bp)
 from schedules import schedule as schedule_bp
 app.register_blueprint(schedule_bp)
 
+from bookings import booking as booking_bp
+app.register_blueprint(booking_bp)
+
 
 @app.route('/login', methods=['GET'])
 def login():
