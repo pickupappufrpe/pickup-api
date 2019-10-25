@@ -1,7 +1,7 @@
 from core import db, Booking
 
 
-def add_booking_query(day, start_time, end_time, spot_id, customer_id):
+def add_booking_query(spot_id, day, start_time, end_time, customer_id):
     booking = Booking(day=day,
                       start_time=start_time,
                       end_time=end_time,
