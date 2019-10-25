@@ -6,7 +6,7 @@ from flask import request
 
 @photo.route('/spot/<spot_id>/photo', methods=['POST'])
 @token_required
-def save_spot_photo(current_user):
+def save_spot_photo(current_user, spot_id):
     data = request.get_json()
     new_photo = Photo(spot_id=data['spot_id'],
                       image=data['image'])
