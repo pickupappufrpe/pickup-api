@@ -4,7 +4,7 @@ from core import db, Photo, User, Spot, token_required
 from flask import request
 
 
-@photo.route('/spot/<spot_id>/photo', methods=['POST'])
+@photo.route('/spot/photo', methods=['POST'])
 @token_required
 def save_spot_photo(current_user, spot_id):
     data = request.get_json()
