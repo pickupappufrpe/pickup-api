@@ -17,7 +17,7 @@ método | endpoint | request | obs:
 **get_spot_schedules** | /spot/schedule/<spot_id> | GET | retorna os horários de um spot específico
 **add_booking** | /booking | POST | {"spot_id":"42" "day":"01/01/2020", "start_time":"20:00:00", "end_time":"21:00:00"}
 **get_spot_bookings** | /spot/<spot_id>/booking | GET | **
-
+**get_city_by_state** | /city/<state_id> | GET | retorna as cidades  de um estado**
 
 
 

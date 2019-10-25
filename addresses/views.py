@@ -120,3 +120,21 @@ def get_all_states(current_user):
         output.append(state_data)
 
     return {'states': output}
+
+
+@address.route('/city/<state_id>', methods=['GET'])
+@token_required
+def get_city_by_state(current_user, state_id):
+    cities = City.query.filter_by(state_id=state_id)
+
+    output = []
+
+    for city in cities:
+        city_data = {
+                     'id': city.id,
+                     'name': city.name,
+                     }
+
+        output.append(city_data)
+
+    return {'cities': output}
