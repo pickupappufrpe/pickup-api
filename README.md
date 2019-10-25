@@ -3,13 +3,27 @@ API REST da plataforma Pick-Up
 
 URL: https://pickupbsiapi.herokuapp.com/
 
-#### Recursos:
+#### rotas ativas:
 
 método | endpoint | request | obs:
 ------------ | ------------- | ------------- | -------------
-**create_user** | /user | POST | {"username": "chandler", "password": "123456"} / retorna o id recém criado, "new_user_id"
-**login** | /login | GET | basic auth / enviar: {"user_group":"2"}. Retorna um token JWT
-**get_user_by_id** | /user/<user_id> | GET | **
+**signup** | /user | POST | {"username": "chandler", "password": "123456", "name":"Chandler", "surname":"Bing", "group_id":"1"}
+**login** | /login?user_group=1 | GET | Basic Auth. Retorna um token JWT
+**get_user_by_id** | /user/<user_id> | GET | Retorna usuário com todos os atributos preenchidos.**
+**save_spot_photo** | /spot/photo | POST | {"spot_id":"42", "image":"*bytearray"}**
+**get_spot_photo** | /spot/<spot_id>/photo | GET | **
+**add_schedule** | /schedule | POST | {"spot_id":"42", "week_day":"4", "opening_time":"06:00:00", "closing_time":"22:00:00"}
+**get_all_schedules** | /schedule | GET | retorna todos os schedules de todos os spots
+**get_spot_schedules** | /spot/schedule/<spot_id> | GET | retorna os horários de um spot específico
+**add_booking** | /booking | POST | {"spot_id":"42" "day":"01/01/2020", "start_time":"20:00:00", "end_time":"21:00:00"}
+**get_spot_bookings** | /spot/<spot_id>/booking | GET | **
+
+
+
+
+#### deprecated:
+método | endpoint | request | obs:
+------------ | ------------- | ------------- | -------------
 **get_user_by_username** | /user/<username> | GET | **
 **get_all_users** | /user | GET | **
 **delete_user** | /user/<user_id> | DELETE | /user/1
@@ -39,8 +53,6 @@ método | endpoint | request | obs:
 **get_state** | /state/<state_id> | GET | **
 **get_all_cities** | /city | GET | **
 **get_all_states** | /state | GET | **
-**save_spot_photo** | /spot/<spot_id>/photo | POST | **
-**get_spot_photo** | /spot/<spot_id>/photo | GET | **
 **save_user_photo** | /user/<user_id>/photo | POST | **
 **get_user_photo** | /user/<user_id>/photo | GET | **
 
