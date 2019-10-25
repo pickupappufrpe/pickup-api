@@ -16,9 +16,9 @@ def add_schedule(current_user):
         return {'message': 'Schedule added!'}
 
 
-@schedule.route('/spot/schedule', methods=['GET'])
+@schedule.route('/schedule', methods=['GET'])
 @token_required
-def get_all_spots(current_user):
+def get_all_schedules(current_user):
     schedules = Schedule.query.all()
 
     output = []
@@ -39,7 +39,7 @@ def get_all_spots(current_user):
 
 @schedule.route('/spot/schedule/<spot_id>', methods=['GET'])
 @token_required
-def get_spots_schedules(current_user, spot_id):
+def get_spot_schedules(current_user, spot_id):
     schedules = Schedule.query.filter_by(spot_id=spot_id)
 
     output = []
