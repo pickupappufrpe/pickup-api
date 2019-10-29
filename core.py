@@ -60,6 +60,7 @@ class Address(db.Model):
 class Spot(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30))
+    price = db.Column(db.Integer)
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     address_id = db.Column(db.Integer, db.ForeignKey('address.id'))
     contact_id = db.Column(db.Integer, db.ForeignKey('contact.id'))

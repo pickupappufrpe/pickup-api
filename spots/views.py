@@ -62,6 +62,7 @@ def create_spot(current_user):
     db.session.flush()
     new_spot = Spot(owner_id=current_user.id,
                     name=data['spot_name'],
+                    price=data['price'],
                     address_id = new_address.id,
                     contact_id = new_contact.id
                     )
@@ -94,6 +95,7 @@ def get_spot_by_id(current_user, spot_id):
 
     return {'id': target.id,
             'name': target.name,
+            'price': target.price,
             'owner_id': target.owner_id,
             'contact_id': target.contact_id
             }
@@ -109,6 +111,7 @@ def get_my_spots(current_user):
     for s in spots:
         spot_data = {'id': s.id,
                      'name': s.name,
+                     'price': s.price,
                      'owner_id': s.owner_id,
                      'contact_id': s.contact_id
                      }
@@ -128,6 +131,7 @@ def get_all_spots(current_user):
     for s in spots:
         spot_data = {'id': s.id,
                      'name': s.name,
+                     'price': s.price,
                      'owner_id': s.owner_id,
                      'contact_id': s.contact_id
                      }
