@@ -64,7 +64,14 @@ class Spot(db.Model):
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     address_id = db.Column(db.Integer, db.ForeignKey('address.id'))
     contact_id = db.Column(db.Integer, db.ForeignKey('contact.id'))
+    ground_id = db.Column(db.Integer, db.ForeignKey('ground.ground_id'))
     photos = db.relationship("Photo")
+
+
+class Ground(db.Model):
+    ground_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20))
+    spots = db.relationship("Spot", uselist=False)
 
 
 class State(db.Model):

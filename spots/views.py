@@ -1,6 +1,6 @@
 from . import spot
 
-from core import db, Spot, Address, City, Contact, token_required, State
+from core import db, Spot, Address, City, Contact, token_required, State, Ground
 from flask import request
 
 
@@ -64,7 +64,8 @@ def create_spot(current_user):
                     name=data['spot_name'],
                     price=data['price'],
                     address_id = new_address.id,
-                    contact_id = new_contact.id
+                    contact_id = new_contact.id,
+                    ground_id=data['ground_id']
                     )
     db.session.add(new_spot)
     db.session.flush()
@@ -88,14 +89,17 @@ def set_spot_contact(current_user, spot_id):
 @spot.route('/spot/<spot_id>', methods=['GET'])
 @token_required
 def get_spot_by_id(current_user, spot_id):
-    target = Spot.query.filter_by(id=id).first()
+    target = Spot.query.filter_by(id=spot_id).first()
 
     if not target:
         return {'message': 'Spot not found!'}
 
+    ground = Ground.query.filter_by(ground_id=target.ground_id).first()
+
     return {'id': target.id,
             'name': target.name,
             'price': target.price,
+            'ground': ground.name,
             'owner_id': target.owner_id,
             'contact_id': target.contact_id
             }
