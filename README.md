@@ -18,7 +18,23 @@ método | endpoint | request | obs:
 **add_booking** | /booking | POST | {"spot_id":"42" "day":"01/01/2020", "start_time":"20:00:00", "end_time":"21:00:00"}
 **get_spot_bookings** | /spot/<spot_id>/booking | GET | **
 **get_city_by_state** | /city/<state_id> | GET | retorna as cidades  de um estado**
+**create_spot** | /spot | POST | {"spot_name": "Ilha do Retiro", "ground_id":"1", "price":"50",...}**
+**get_spot_by_id** | /spot | GET | {"spot_name": "Ilha do Retiro", "ground_id":"1", "price":"50",...}**
 
+
+#### Tipos de usuário:
+user_type | id |
+------------ | ------------- |
+jogador | 1
+locador | 2
+
+#### Tipos de terreno (ground_id):
+ground | id |
+------------ | ------------- |
+Quadra | 1
+Grama | 2
+Grama Sintetica | 3
+Terra | 4
 
 
 #### deprecated:
@@ -40,7 +56,6 @@ método | endpoint | request | obs:
 **create_address** | /address | POST | {"street":"Baker", "number":"221", "neighborhood":"Marylebone"}**
 **set_address** | /spot/<address_id>/address | POST | {"address_id":"1"}**
 **get_address** | /spot/<spot_id>/address | GET | **
-**create_spot** | /spot | POST | {"spot_name": "Ilha do Retiro"}**
 **set_spot_contact** | /spot/id/contact | POST | {"group":"jogador"}**
 **get_spot_by_id** | /spot/<spot_id> | GET | **
 **get_my_spots** | /spot/my | GET | retorna os espaços do proprietário logado**

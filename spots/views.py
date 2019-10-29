@@ -113,9 +113,11 @@ def get_my_spots(current_user):
     output = []
 
     for s in spots:
+        ground = Ground.query.filter_by(ground_id=s.ground_id).first()
         spot_data = {'id': s.id,
                      'name': s.name,
                      'price': s.price,
+                     'ground': ground.name,
                      'owner_id': s.owner_id,
                      'contact_id': s.contact_id
                      }
