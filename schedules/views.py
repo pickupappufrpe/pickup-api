@@ -2,7 +2,7 @@ from . import schedule
 
 from flask import request
 from core import token_required, Schedule
-from .controls import add_schedule_query
+from .controls import add_schedule_query, get_spot_schedules_query
 
 
 @schedule.route('/schedule', methods=['POST'])
@@ -37,22 +37,7 @@ def get_all_schedules(current_user):
     return {'schedules': output}
 
 
-@schedule.route('/spot/schedule/<spot_id>', methods=['GET'])
+@schedule.route('/spot/<spot_id>/schedule', methods=['GET'])
 @token_required
 def get_spot_schedules(current_user, spot_id):
-    schedules = Schedule.query.filter_by(spot_id=spot_id)
-
-    output = []
-
-    for s in schedules:
-        schedules_data = {
-            'schedule_id': s.schedule_id,
-            'spot_id': s.spot_id,
-            'week_day': s.week_day,
-            'opening_time': s.opening_time,
-            'closing_time': s.closing_time
-        }
-
-        output.append(schedules_data)
-
-    return {'schedules': output}
+    return get_spot_schedules_query(spot_id)

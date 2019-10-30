@@ -1,7 +1,7 @@
 from . import spot
 
 from core import db, Spot, Address, City, Contact, token_required, State, Ground
-from .controls import create_address_query, create_contact_query, create_spot_query
+from .controls import create_address_query, create_contact_query, create_spot_query, get_spot_by_id_query
 from flask import request
 
 
@@ -80,20 +80,7 @@ def set_spot_contact(current_user, spot_id):
 @spot.route('/spot/<spot_id>', methods=['GET'])
 @token_required
 def get_spot_by_id(current_user, spot_id):
-    target = Spot.query.filter_by(id=spot_id).first()
-
-    if not target:
-        return {'message': 'Spot not found!'}
-
-    ground = Ground.query.filter_by(ground_id=target.ground_id).first()
-
-    return {'id': target.id,
-            'name': target.name,
-            'price': target.price,
-            'ground': ground.name,
-            'owner_id': target.owner_id,
-            'contact_id': target.contact_id
-            }
+    return get_spot_by_id_query(spot_id)
 
 
 @spot.route('/spot/my', methods=['GET'])
