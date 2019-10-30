@@ -1,6 +1,7 @@
 from . import spot
 
 from core import db, Spot, Address, City, Contact, token_required, State, Ground
+from .controls import create_address_query, create_contact_query, create_spot_query
 from flask import request
 
 
@@ -46,32 +47,22 @@ def get_address(current_user, spot_id):
 @token_required
 def create_spot(current_user):
     data = request.get_json()
-    city = City.query.filter_by(name=data['cidade']).first()
-    state = State.query.filter_by(name=data['estado']).first()
-    new_address = Address(street = data['street'],
-                          cep = data['cep'],
-                          number = data['numero'],
-                          neighborhood = data['bairro'],
-                          city_id = city.id,
-                          state_id = state.id
-                          )
-    db.session.add(new_address)
-    db.session.flush()
-    new_contact = Contact(email = data['email'], phone = data['telefone'])
-    db.session.add(new_contact)
-    db.session.flush()
-    new_spot = Spot(owner_id=current_user.id,
-                    name=data['spot_name'],
-                    price=data['price'],
-                    address_id = new_address.id,
-                    contact_id = new_contact.id,
-                    ground_id=data['ground_id']
-                    )
-    db.session.add(new_spot)
-    db.session.flush()
-    new_spot_id = str(new_spot.id)
-    db.session.commit()
-    return {'message': 'New Spot created!', "spot_id": new_spot_id}
+    address_id = create_address_query(data['city_id'],
+                                      data['street'],
+                                      data['cep'],
+                                      data['number'],
+                                      data['neighborhood'])
+
+    contact_id = create_contact_query(data['email'],
+                                      data['phone'])
+
+    spot_id = create_spot_query(data['spot_name'],
+                                data['price'],
+                                data['ground_id'],
+                                current_user.id,
+                                address_id,
+                                contact_id)
+    return {'message': 'New Spot created!', "spot_id": spot_id}
 
 
 @spot.route('/spot/<spot_id>/contact', methods=['POST'])
