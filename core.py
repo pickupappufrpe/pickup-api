@@ -1,6 +1,7 @@
-from flask import Flask, request, make_response
+from flask import Flask, request, make_response, url_for
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash
+from werkzeug.utils import secure_filename
 import jwt
 from functools import wraps
 import datetime
@@ -11,6 +12,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['DEBUG'] = os.environ.get('DEBUG')
+app.config['UPLOAD_FOLDER'] = os.environ.get('UPLOAD_FOLDER')
 db = SQLAlchemy(app)
 
 
