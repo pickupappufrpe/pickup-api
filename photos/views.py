@@ -38,6 +38,24 @@ def upload_file(current_user, spot_id):
             #                         filename=filename))
 
 
+@photo.route('/spot/<spot_id>/photo/list', methods=['GET'])
+@token_required
+def get_photo_list(current_user, spot_id):
+    target = Photo.query.filter_by(spot_id=spot_id)
+    photo_list = []
+    for i in target:
+        photo_list.append({i.id: i.image})
+    return {'spots': photo_list}
+
+
+@photo.route('/photo/<filename>', methods=['GET'])
+@token_required
+def get_photo_by_filename(current_user, filename):
+    path = app.config['UPLOAD_FOLDER']+'/'+filename
+
+    return send_file(path, mimetype='image/gif')
+
+
 @photo.route('/spot/<spot_id>/photo', methods=['GET'])
 @token_required
 def get_spot_photo(current_user, spot_id):
