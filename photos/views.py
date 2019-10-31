@@ -2,8 +2,8 @@ from . import photo
 
 from core import db, Photo, User, Spot, token_required, app
 from flask import request, send_file
-from werkzeug.utils import secure_filename
 import os
+import uuid
 
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
@@ -26,14 +26,12 @@ def upload_file(current_user, spot_id):
         if file.filename == '':
             return {'message': 'No selected file'}
         if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
+            filename = str(uuid.uuid4()) + "." + file.filename.rsplit('.', 1)[1].lower()
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             new_photo = Photo(spot_id=spot_id, image=filename)
             db.session.add(new_photo)
             db.session.commit()
             return {'message': 'Success!'}
-            # return redirect(url_for('uploaded_file',
-            #                         filename=filename))
 
 
 @photo.route('/spot/<spot_id>/photo/list', methods=['GET'])
