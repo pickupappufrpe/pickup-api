@@ -35,4 +35,12 @@ def get_user_by_id_query(user_id):
     # TODO: incluir contato na query
     if not target:
         return {'message': 'Sorry!'}
+    print(type(target))
+    return target
+
+
+def get_players_query():
+    target = User.query.join(Person, User.person_id == Person.id).\
+             add_columns(User.username, Person.name, Person.surname).\
+             filter(User.group_id == "1")
     return target

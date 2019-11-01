@@ -2,7 +2,7 @@ from . import user
 
 from flask import request
 from core import db, User, token_required
-from .controls import signup_query, get_user_by_id_query
+from .controls import signup_query, get_user_by_id_query, get_players_query
 
 
 @user.route('/signup', methods=['POST'])
@@ -85,17 +85,12 @@ def delete_user(current_user, user_id):
 @user.route('/players', methods=['GET'])
 @token_required
 def get_players(current_user):
-    target = db.engine.execute('SELECT "user".username, person.name, person.surname '
-                               'FROM "user" '
-                               'INNER JOIN person '
-                               'ON "user".person_id = person.id '
-                               'WHERE "user".group_id = 1')
-    output = []
-    for i in target:
-        player_data = {'username': i[0],
-                       'name': i[1],
-                       'surname': i[2]}
+    target = get_players_query()
+    players = []
+    for player in target:
+        player_data = {'username': player.username,
+                       'name': player.name,
+                       'surname': player.surname}
+        players.append(player_data)
 
-        output.append(player_data)
-
-    return {'players': output}
+    return {'players': players}
