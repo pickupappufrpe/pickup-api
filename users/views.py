@@ -25,6 +25,7 @@ def signup():
 @token_required
 def get_user_by_id(current_user, user_id):
     target = get_user_by_id_query(user_id)
+    print(type(target))
 
     return {'username': target.username,
             'name': target.name,
@@ -79,3 +80,22 @@ def delete_user(current_user, user_id):
     db.session.commit()
 
     return {'message': 'The user has been deleted!'}
+
+
+@user.route('/players', methods=['GET'])
+@token_required
+def get_players():
+    target = db.engine.execute('SELECT "user".username, person.name, person.surname '
+                               'FROM "user" '
+                               'INNER JOIN person '
+                               'ON "user".person_id = person.id '
+                               'WHERE "user".group_id = 1')
+    output = []
+    for i in target:
+        player_data = {'username': i[0],
+                       'name': i[1],
+                       'surname': i[2]}
+
+        output.append(player_data)
+
+    return {'players': output}
