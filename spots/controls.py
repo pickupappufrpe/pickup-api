@@ -46,8 +46,8 @@ def get_spot_by_id_query(spot_id):
     schedules_data = []
     for i in schedules:
         schedules_data.append({'week_day': i.week_day,
-                               'opening_time': i.opening_time,
-                               'closing_time': i.closing_time})
+                               'opening_time': str(i.opening_time),
+                               'closing_time': str(i.closing_time)})
 
     address = Address.query.filter_by(id=str(target.address_id)).first()
 

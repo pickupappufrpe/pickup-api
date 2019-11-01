@@ -117,8 +117,8 @@ def get_all_spots(current_user):
         schedules_data = []
         for i in schedules:
             schedules_data.append({'week_day': i.week_day,
-                                   'opening_time': i.opening_time,
-                                   'closing_time': i.closing_time})
+                                   'opening_time': str(i.opening_time),
+                                   'closing_time': str(i.closing_time)})
 
         address = Address.query.filter_by(id=str(s.address_id)).first()
 
