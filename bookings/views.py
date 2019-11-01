@@ -48,8 +48,8 @@ def get_spot_bookings(current_user, spot_id):
         bookings_data = {
             'day': b.day,
             'spot_id': b.spot_id,
-            'start_time': b.start_time,
-            'end_time': b.end_time,
+            'start_time': str(b.start_time),
+            'end_time': str(b.end_time),
         }
 
         output.append(bookings_data)
