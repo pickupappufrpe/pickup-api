@@ -1,6 +1,6 @@
 from . import spot
 
-from core import db, Spot, Address, City, Contact, token_required, State, Ground
+from core import db, Spot, Address, City, Contact, token_required, State, Ground, Schedule
 from .controls import create_address_query, create_contact_query, create_spot_query, get_spot_by_id_query
 from flask import request
 
@@ -113,11 +113,33 @@ def get_all_spots(current_user):
     output = []
 
     for s in spots:
+        schedules = Schedule.query.filter_by(spot_id=s.id)
+        schedules_data = []
+        for i in schedules:
+            schedules_data.append({'week_day': i.week_day,
+                                   'opening_time': i.opening_time,
+                                   'closing_time': i.closing_time})
+
+        address = Address.query.filter_by(id=str(s.address_id)).first()
+
+        city = City.query.filter_by(id=address.city_id).first()
+        state = State.query.filter_by(id=city.state_id).first()
+
+        address_data = {
+            'street': address.street,
+            'number': address.number,
+            'neighborhood': address.neighborhood,
+            'city': city.name,
+            'state': state.name,
+            'cep': address.cep
+        }
         spot_data = {'id': s.id,
                      'name': s.name,
                      'price': s.price,
                      'owner_id': s.owner_id,
-                     'contact_id': s.contact_id
+                     'contact_id': s.contact_id,
+                     'schedules': schedules_data,
+                     'address': address_data
                      }
 
         output.append(spot_data)

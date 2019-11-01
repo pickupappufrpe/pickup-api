@@ -1,4 +1,4 @@
-from core import db, Address, Contact, Spot, Ground
+from core import db, Address, Contact, Spot, Ground, Schedule, City, State
 
 
 def create_address_query(city_id, street, cep, number, neighborhood):
@@ -42,10 +42,32 @@ def get_spot_by_id_query(spot_id):
         return {'message': 'Spot not found!'}
 
     ground = Ground.query.filter_by(ground_id=target.ground_id).first()
+    schedules = Schedule.query.filter_by(spot_id=spot_id)
+    schedules_data = []
+    for i in schedules:
+        schedules_data.append({'week_day': i.week_day,
+                               'opening_time': i.opening_time,
+                               'closing_time': i.closing_time})
+
+    address = Address.query.filter_by(id=str(target.address_id)).first()
+
+    city = City.query.filter_by(id=address.city_id).first()
+    state = State.query.filter_by(id=city.state_id).first()
+
+    address_data = {
+        'street': address.street,
+        'number': address.number,
+        'neighborhood': address.neighborhood,
+        'city': city.name,
+        'state': state.name,
+        'cep': address.cep
+    }
 
     return {'id': target.id,
             'name': target.name,
             'price': target.price,
             'ground': ground.name,
             'owner_id': target.owner_id,
-            'contact_id': target.contact_id}
+            'contact_id': target.contact_id,
+            'schedules': schedules_data,
+            'address': address_data}
