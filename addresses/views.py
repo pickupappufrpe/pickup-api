@@ -122,7 +122,7 @@ def get_all_states(current_user):
     return {'states': output}
 
 
-@address.route('/city/<state_id>', methods=['GET'])
+@address.route('/state/<state_id>/city', methods=['GET'])
 @token_required
 def get_city_by_state(current_user, state_id):
     cities = City.query.filter_by(state_id=state_id)
