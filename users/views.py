@@ -84,7 +84,7 @@ def delete_user(current_user, user_id):
 
 @user.route('/players', methods=['GET'])
 @token_required
-def get_players():
+def get_players(current_user):
     target = db.engine.execute('SELECT "user".username, person.name, person.surname '
                                'FROM "user" '
                                'INNER JOIN person '
