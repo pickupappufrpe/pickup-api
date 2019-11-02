@@ -69,7 +69,7 @@ def get_spot_photo_list(current_user, spot_id):
     target = Photo.query.filter_by(spot_id=spot_id)
     photo_list = []
     for i in target:
-        photo_list.append({i.id: i.image})
+        photo_list.append({"filename": i.image})
     return {'spot_photos': photo_list}
 
 
