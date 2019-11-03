@@ -35,39 +35,64 @@ def create_spot_query(spot_name, price, ground_id, owner_id, address_id, contact
     return new_spot.id
 
 
-def get_spot_by_id_query(spot_id):
-    target = Spot.query.filter_by(id=spot_id).first()
-
-    if not target:
-        return {'message': 'Spot not found!'}
-
-    ground = Ground.query.filter_by(ground_id=target.ground_id).first()
+def get_schedules(spot_id):
     schedules = Schedule.query.filter_by(spot_id=spot_id)
     schedules_data = []
     for i in schedules:
         schedules_data.append({'week_day': i.week_day,
                                'opening_time': str(i.opening_time),
                                'closing_time': str(i.closing_time)})
+    return schedules_data
 
-    address = Address.query.filter_by(id=str(target.address_id)).first()
 
+def get_address(address_id):
+    address = Address.query.filter_by(id=str(address_id)).first()
     city = City.query.filter_by(id=address.city_id).first()
     state = State.query.filter_by(id=city.state_id).first()
 
-    address_data = {
-        'street': address.street,
-        'number': address.number,
-        'neighborhood': address.neighborhood,
-        'city': city.name,
-        'state': state.name,
-        'cep': address.cep
-    }
+    return {'street': address.street,
+            'number': address.number,
+            'neighborhood': address.neighborhood,
+            'city': city.name,
+            'state': state.name,
+            'cep': address.cep}
 
-    return {'id': target.id,
-            'name': target.name,
-            'price': target.price,
-            'ground': ground.name,
-            'owner_id': target.owner_id,
-            'contact_id': target.contact_id,
-            'schedules': schedules_data,
-            'address': address_data}
+
+def get_contact(contact_id):
+    contact = Contact.query.filter_by(id=contact_id).first()
+    return {'email': contact.email,
+            'phone': contact.phone}
+
+
+def render_spot(spot):
+    schedules_data = get_schedules(spot.id)
+    address_data = get_address(spot.address_id)
+    contact_data = get_contact(spot.contact_id)
+    ground = Ground.query.filter_by(ground_id=spot.ground_id).first()
+
+    spot_data = {'id': spot.id,
+                 'name': spot.name,
+                 'price': spot.price,
+                 'ground': ground.name,
+                 'owner_id': spot.owner_id,
+                 'contact_id': spot.contact_id,
+                 'schedules': schedules_data,
+                 'address': address_data,
+                 'contact': contact_data}
+    return spot_data
+
+
+def render_spot_group(spots):
+    output = []
+    for s in spots:
+        output.append(render_spot(s))
+    return {'spots': output}
+
+
+def get_spot_by_id_query(spot_id):
+    target = Spot.query.filter_by(id=spot_id).first()
+
+    if not target:
+        return {'message': 'Spot not found!'}
+
+    return render_spot(target)

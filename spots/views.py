@@ -1,7 +1,8 @@
 from . import spot
 
 from core import db, Spot, Address, City, Contact, token_required, State, Ground, Schedule
-from .controls import create_address_query, create_contact_query, create_spot_query, get_spot_by_id_query
+from .controls import create_address_query, create_contact_query, create_spot_query, get_spot_by_id_query, \
+    render_spot_group
 from flask import request
 
 
@@ -87,97 +88,11 @@ def get_spot_by_id(current_user, spot_id):
 @token_required
 def get_my_spots(current_user):
     spots = Spot.query.filter_by(owner_id=current_user.id)
-
-    output = []
-
-    for s in spots:
-        schedules = Schedule.query.filter_by(spot_id=s.id)
-        schedules_data = []
-        for i in schedules:
-            schedules_data.append({'week_day': i.week_day,
-                                   'opening_time': str(i.opening_time),
-                                   'closing_time': str(i.closing_time)})
-
-        address = Address.query.filter_by(id=str(s.address_id)).first()
-
-        city = City.query.filter_by(id=address.city_id).first()
-        state = State.query.filter_by(id=city.state_id).first()
-
-        address_data = {
-            'street': address.street,
-            'number': address.number,
-            'neighborhood': address.neighborhood,
-            'city': city.name,
-            'state': state.name,
-            'cep': address.cep
-        }
-        ground = Ground.query.filter_by(ground_id=s.ground_id).first()
-
-        contact = Contact.query.filter_by(id=s.contact_id).first()
-        contact_data = {'email': contact.email,
-                        'phone': contact.phone}
-
-        spot_data = {'id': s.id,
-                     'name': s.name,
-                     'price': s.price,
-                     'ground': ground.name,
-                     'owner_id': s.owner_id,
-                     'contact_id': s.contact_id,
-                     'schedules': schedules_data,
-                     'address': address_data,
-                     'contact': contact_data
-                     }
-
-        output.append(spot_data)
-
-    return {'spots': output}
+    return {'spots': render_spot_group(spots)}
 
 
 @spot.route('/spot', methods=['GET'])
 @token_required
 def get_all_spots(current_user):
     spots = Spot.query.all()
-
-    output = []
-
-    for s in spots:
-        schedules = Schedule.query.filter_by(spot_id=s.id)
-        schedules_data = []
-        for i in schedules:
-            schedules_data.append({'week_day': i.week_day,
-                                   'opening_time': str(i.opening_time),
-                                   'closing_time': str(i.closing_time)})
-
-        address = Address.query.filter_by(id=str(s.address_id)).first()
-
-        city = City.query.filter_by(id=address.city_id).first()
-        state = State.query.filter_by(id=city.state_id).first()
-
-        address_data = {
-            'street': address.street,
-            'number': address.number,
-            'neighborhood': address.neighborhood,
-            'city': city.name,
-            'state': state.name,
-            'cep': address.cep
-        }
-        ground = Ground.query.filter_by(ground_id=s.ground_id).first()
-
-        contact = Contact.query.filter_by(id=s.contact_id).first()
-        contact_data = {'email': contact.email,
-                        'phone': contact.phone}
-
-        spot_data = {'id': s.id,
-                     'name': s.name,
-                     'price': s.price,
-                     'ground': ground.name,
-                     'owner_id': s.owner_id,
-                     'contact_id': s.contact_id,
-                     'schedules': schedules_data,
-                     'address': address_data,
-                     'contact': contact_data
-                     }
-
-        output.append(spot_data)
-
-    return {'spots': output}
+    return {'spots': render_spot_group(spots)}
