@@ -112,6 +112,11 @@ def get_my_spots(current_user):
             'cep': address.cep
         }
         ground = Ground.query.filter_by(ground_id=s.ground_id).first()
+
+        contact = Contact.query.filter_by(id=s.contact_id).first()
+        contact_data = {'email': contact.email,
+                        'phone': contact.phone}
+
         spot_data = {'id': s.id,
                      'name': s.name,
                      'price': s.price,
@@ -119,7 +124,8 @@ def get_my_spots(current_user):
                      'owner_id': s.owner_id,
                      'contact_id': s.contact_id,
                      'schedules': schedules_data,
-                     'address': address_data
+                     'address': address_data,
+                     'contact': contact_data
                      }
 
         output.append(spot_data)
@@ -156,6 +162,11 @@ def get_all_spots(current_user):
             'cep': address.cep
         }
         ground = Ground.query.filter_by(ground_id=s.ground_id).first()
+
+        contact = Contact.query.filter_by(id=s.contact_id).first()
+        contact_data = {'email': contact.email,
+                        'phone': contact.phone}
+
         spot_data = {'id': s.id,
                      'name': s.name,
                      'price': s.price,
@@ -164,6 +175,7 @@ def get_all_spots(current_user):
                      'contact_id': s.contact_id,
                      'schedules': schedules_data,
                      'address': address_data
+                     'contact': contact_data
                      }
 
         output.append(spot_data)
