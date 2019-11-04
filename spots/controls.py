@@ -1,4 +1,4 @@
-from core import db, Address, Contact, Spot, Ground, Schedule, City, State
+from core import db, Address, Contact, Spot, Ground, Schedule, City, State, Photo
 
 
 def create_address_query(city_id, street, cep, number, neighborhood):
@@ -64,11 +64,20 @@ def get_contact(contact_id):
             'phone': contact.phone}
 
 
+def get_photo_list(spot_id):
+    target = Photo.query.filter_by(spot_id=spot_id)
+    photo_list = []
+    for i in target:
+        photo_list.append({"filename": i.image})
+    return photo_list
+
+
 def render_spot(spot):
     schedules_data = get_schedules(spot.id)
     address_data = get_address(spot.address_id)
     contact_data = get_contact(spot.contact_id)
     ground = Ground.query.filter_by(ground_id=spot.ground_id).first()
+    photo_list = get_photo_list(spot.id)
 
     spot_data = {'id': spot.id,
                  'name': spot.name,
@@ -78,7 +87,8 @@ def render_spot(spot):
                  'contact_id': spot.contact_id,
                  'schedules': schedules_data,
                  'address': address_data,
-                 'contact': contact_data}
+                 'contact': contact_data,
+                 'photos': photo_list}
     return spot_data
 
 
