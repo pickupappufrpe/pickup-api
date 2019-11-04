@@ -88,11 +88,11 @@ def get_spot_by_id(current_user, spot_id):
 @token_required
 def get_my_spots(current_user):
     spots = Spot.query.filter_by(owner_id=current_user.id)
-    return {'spots': render_spot_group(spots)}
+    return render_spot_group(spots)
 
 
 @spot.route('/spot', methods=['GET'])
 @token_required
 def get_all_spots(current_user):
     spots = Spot.query.all()
-    return {'spots': render_spot_group(spots)}
+    return render_spot_group(spots)
