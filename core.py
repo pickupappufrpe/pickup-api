@@ -1,11 +1,11 @@
-from flask import Flask, request, make_response, url_for
-from flask_sqlalchemy import SQLAlchemy
-from werkzeug.security import check_password_hash
-from werkzeug.utils import secure_filename
-import jwt
-from functools import wraps
 import datetime
 import os
+from functools import wraps
+
+import jwt
+from flask import Flask, request, make_response
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import check_password_hash
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
