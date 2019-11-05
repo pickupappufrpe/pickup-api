@@ -1,10 +1,11 @@
-from . import photo
-
-from core import db, Photo, User, Spot, token_required, app
-from flask import request, send_file, Response
-import boto3
 import os
-import uuid
+
+import boto3
+from flask import request, Response
+
+from core import Photo, token_required
+from photos.controls import save_photo
+from . import photo
 
 S3_KEY = os.environ.get('KEY_ID')
 S3_SECRET = os.environ.get('ACCESS_KEY')
@@ -22,45 +23,33 @@ def allowed_file(filename):
 @photo.route('/spot/<spot_id>/photo', methods=['POST'])
 @token_required
 def upload_spot_photo(current_user, spot_id):
-    if request.method == 'POST':
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            return {'message': 'No file part'}
-        file = request.files['file']
-        # if user does not select file, browser also
-        # submit an empty part without filename
-        if file.filename == '':
-            return {'message': 'No selected file'}
-        if file and allowed_file(file.filename):
-            filename = str(uuid.uuid4()) + "." + file.filename.rsplit('.', 1)[1].lower()
-            # file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            s3.Bucket(bucket).put_object(Key=filename, Body=file)
-            new_photo = Photo(spot_id=spot_id, image=filename)
-            db.session.add(new_photo)
-            db.session.commit()
-            return {'message': 'Success!'}
+    # check if the post request has the file part
+    if 'file' not in request.files:
+        return {'message': 'No file part'}
+    file = request.files['file']
+    # if user does not select file, browser also
+    # submit an empty part without filename
+    if file.filename == '':
+        return {'message': 'No selected file'}
+    if file and allowed_file(file.filename):
+        save_photo(file, spot_id=spot_id)
+        return {'message': 'Success!'}
 
 
 @photo.route('/spot/<user_id>/photo', methods=['POST'])
 @token_required
 def upload_user_photo(current_user, user_id):
-    if request.method == 'POST':
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            return {'message': 'No file part'}
-        file = request.files['file']
-        # if user does not select file, browser also
-        # submit an empty part without filename
-        if file.filename == '':
-            return {'message': 'No selected file'}
-        if file and allowed_file(file.filename):
-            filename = str(uuid.uuid4()) + "." + file.filename.rsplit('.', 1)[1].lower()
-            # file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            s3.Bucket(bucket).put_object(Key=filename, Body=file)
-            new_photo = Photo(user_id=user_id, image=filename)
-            db.session.add(new_photo)
-            db.session.commit()
-            return {'message': 'Success!'}
+    # check if the post request has the file part
+    if 'file' not in request.files:
+        return {'message': 'No file part'}
+    file = request.files['file']
+    # if user does not select file, browser also
+    # submit an empty part without filename
+    if file.filename == '':
+        return {'message': 'No selected file'}
+    if file and allowed_file(file.filename):
+        save_photo(file, user_id=user_id)
+        return {'message': 'Success!'}
 
 
 @photo.route('/spot/<spot_id>/photo/list', methods=['GET'])
@@ -91,14 +80,3 @@ def get_photo_by_filename(current_user, filename):
     return Response(
         file_obj['Body'].read(),
         mimetype='image/jpeg',)
-
-
-@photo.route('/user/<user_id>/photo', methods=['POST'])
-@token_required
-def save_user_photo(current_user):
-    data = request.get_json()
-    new_photo = Photo(user_id=current_user.id,
-                      image=data['image'])
-    db.session.add(new_photo)
-    db.session.commit()
-    return {'message': 'Image saved!'}
