@@ -86,17 +86,11 @@ def get_user_photo_list(current_user, user_id):
 @photo.route('/photo/<filename>', methods=['GET'])
 @token_required
 def get_photo_by_filename(current_user, filename):
-    # path = app.config['UPLOAD_FOLDER']+'/'+filename
-
     my_bucket = s3.Bucket(bucket)
-
     file_obj = my_bucket.Object(filename).get()
-
     return Response(
         file_obj['Body'].read(),
-        mimetype='image/jpeg',
-        # headers={"Content-Disposition": "attachment;filename={}".format(key)}
-    )
+        mimetype='image/jpeg',)
 
 
 @photo.route('/user/<user_id>/photo', methods=['POST'])
