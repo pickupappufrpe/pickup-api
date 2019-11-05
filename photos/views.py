@@ -36,7 +36,7 @@ def upload_spot_photo(current_user, spot_id):
         return {'message': 'Success!'}
 
 
-@photo.route('/spot/<user_id>/photo', methods=['POST'])
+@photo.route('/user/<user_id>/photo', methods=['POST'])
 @token_required
 def upload_user_photo(current_user, user_id):
     # check if the post request has the file part
