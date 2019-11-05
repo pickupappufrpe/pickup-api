@@ -97,12 +97,3 @@ def render_spot_group(spots):
     for s in spots:
         output.append(render_spot(s))
     return {'spots': output}
-
-
-def get_spot_by_id_query(spot_id):
-    target = Spot.query.filter_by(id=spot_id).first()
-
-    if not target:
-        return {'message': 'Spot not found!'}
-
-    return render_spot(target)

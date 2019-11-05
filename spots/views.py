@@ -1,47 +1,8 @@
-from . import spot
-
-from core import db, Spot, Address, City, Contact, token_required, State, Ground, Schedule
-from .controls import create_address_query, create_contact_query, create_spot_query, get_spot_by_id_query, \
-    render_spot_group
 from flask import request
 
-
-@spot.route('/spot/<spot_id>/address', methods=['POST'])
-@token_required
-def set_address(current_user, spot_id):
-    data = request.get_json()
-    target = Spot.query.filter_by(id=spot_id).first()
-    address = Address.query.filter_by(id=data['address_id']).first()
-    target.address_id = address.id
-    db.session.add(target)
-    db.session.commit()
-    return {'message': "Address has been set!"}
-
-
-@spot.route('/spot/<spot_id>/address', methods=['GET'])  # TODO: transferir para o pacote 'addresses'
-@token_required
-def get_address(current_user, spot_id):
-    target = Spot.query.filter_by(id=spot_id).first()
-
-    if not target:
-        return {'message': "Spot not found!"}
-
-    address = Address.query.filter_by(id=str(target.address_id)).first()
-
-    if not address:
-        return {'message': "Address not found!"}
-
-    city = City.query.filter_by(id=address.city_id).first()
-    state = State.query.filter_by(id=city.state_id).first()
-
-    return {
-            'street': address.street,
-            'number': address.number,
-            'neighborhood': address.neighborhood,
-            'city': city.name,
-            'state': state.name,
-            'cep': address.cep
-            }
+from core import Spot, token_required
+from . import spot
+from .controls import create_address_query, create_contact_query, create_spot_query, render_spot_group
 
 
 @spot.route('/spot', methods=['POST'])
@@ -64,24 +25,6 @@ def create_spot(current_user):
                                 address_id,
                                 contact_id)
     return {'message': 'New Spot created!', "spot_id": spot_id}
-
-
-@spot.route('/spot/<spot_id>/contact', methods=['POST'])
-@token_required
-def set_spot_contact(current_user, spot_id):
-    data = request.get_json()
-    target = Spot.query.filter_by(id=spot_id).first()
-    contact = Contact.query.filter_by(id=data['contact_id']).first()
-    target.contact_id = contact.id
-    db.session.add(target)
-    db.session.commit()
-    return {'message': 'Contact has been set!'}
-
-
-@spot.route('/spot/<spot_id>', methods=['GET'])
-@token_required
-def get_spot_by_id(current_user, spot_id):
-    return get_spot_by_id_query(spot_id)
 
 
 @spot.route('/spot/my', methods=['GET'])
