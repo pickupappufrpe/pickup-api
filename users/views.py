@@ -50,24 +50,6 @@ def get_user_by_username(username):
             }
 
 
-@user.route('/user', methods=['GET'])
-@token_required
-def get_all_users(current_user):
-    users = User.query.all()
-
-    output = []
-
-    for individual in users:
-        user_data = {
-            'id': individual.id,
-            'username': individual.username
-        }
-
-        output.append(user_data)
-
-    return {'users': output}
-
-
 @user.route('/user/<user_id>', methods=['DELETE'])
 @token_required
 def delete_user(current_user, user_id):
