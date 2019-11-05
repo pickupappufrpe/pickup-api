@@ -3,30 +3,62 @@ API REST da plataforma Pick-Up
 
 URL: https://pickupbsiapi.herokuapp.com/
 
-#### rotas ativas:
+Com exceção de login e signup todas as requisições devem carregar o token no header **'x-access-token'**
 
+#### core.py:
+método | endpoint | request | obs:
+------------ | ------------- | ------------- | -------------
+**login** | /login?user_group=1 | GET | Basic Auth. Retorna um token JWT
+
+#### users:
 método | endpoint | request | obs:
 ------------ | ------------- | ------------- | -------------
 **signup** | /user | POST | {"username": "chandler", "password": "123456", "name":"Chandler", "surname":"Bing", "group_id":"1"}
-**login** | /login?user_group=1 | GET | Basic Auth. Retorna um token JWT
-**get_user_by_id** | /user/<user_id> | GET | Retorna usuário com todos os atributos preenchidos.**
-**save_spot_photo** | /spot/photo | POST | {"spot_id":"42", "image":"*bytearray"}**
-**get_spot_photo** | /spot/<spot_id>/photo | GET | **
-**add_schedule** | /schedule | POST | {"spot_id":"42", "week_day":"4", "opening_time":"06:00:00", "closing_time":"22:00:00"}
-**get_all_schedules** | /schedule | GET | retorna todos os schedules de todos os spots
-**get_spot_schedules** | /spot/schedule/<spot_id> | GET | retorna os horários de um spot específico
+**get_user_by_id** | /user/<user_id> | GET | Retorna usuário com todos os atributos preenchidos.
+**get_user_by_username** | /user/username/<username> | GET | Retorna usuário com todos os atributos preenchidos.
+**delete_user** | /user/<user_id> | DELETE | Delete um usuário
+**get_players** | /players | GET | Retorna usuários do tipo jogador.
+
+#### addresses:
+método | endpoint | request | obs:
+------------ | ------------- | ------------- | -------------
+**get_all_states** | /state | GET | 
+**get_city_by_state** | /state/<state_id>/city | GET |
+
+#### bookings:
+método | endpoint | request | obs:
+------------ | ------------- | ------------- | -------------
 **add_booking** | /booking | POST | {"spot_id":"42" "day":"01/01/2020", "start_time":"20:00:00", "end_time":"21:00:00"}
 **get_spot_bookings** | /spot/<spot_id>/booking | GET | **
-**get_city_by_state** | /city/<state_id> | GET | retorna as cidades  de um estado**
-**create_spot** | /spot | POST | {"spot_name": "Ilha do Retiro", "ground_id":"1", "price":"50",...}**
-**get_spot_by_id** | /spot | GET | {"spot_name": "Ilha do Retiro", "ground_id":"1", "price":"50",...}**
+
+#### photos:
+método | endpoint | request | obs:
+------------ | ------------- | ------------- | -------------
+**upload_spot_photo** | /spot/<spot_id>/photo | POST | form-data com key **file**
+**upload_user_photo** | /user/<spot_id>/photo | POST | form-data com key **file**
+**get_spot_photo_list** | /spot/<spot_id>/photo/list | GET |
+**get_user_photo_list** | /user/<spot_id>/photo/list | GET |
+**get_photo_by_filename** | /photo/<filename> | GET |
+
+#### schedules:
+método | endpoint | request | obs:
+------------ | ------------- | ------------- | -------------
+**add_schedule** | /schedule | POST | {"spot_id":"42", "week_day":"4", "opening_time":"06:00:00", "closing_time":"22:00:00"}
+
+#### spots:
+método | endpoint | request | obs:
+------------ | ------------- | ------------- | -------------
+**create_spot** | /spot | POST | {"spot_name": "Ilha do Retiro", "ground_id":"1", "price":"50",...}
+**get_my_spots** | /spot/my | GET | retorna os espaços do proprietário logado
+**get_all_spots** | /spot | GET |
 
 
 #### Tipos de usuário:
-user_type | id |
+user_group | id |
 ------------ | ------------- |
 jogador | 1
 locador | 2
+arbitro | 3
 
 #### Tipos de terreno (ground_id):
 ground | id |
@@ -36,46 +68,6 @@ Grama | 2
 Grama Sintetica | 3
 Terra | 4
 
-
-#### deprecated:
-método | endpoint | request | obs:
------------- | ------------- | ------------- | -------------
-**get_user_by_username** | /user/<username> | GET | **
-**get_all_users** | /user | GET | **
-**delete_user** | /user/<user_id> | DELETE | /user/1
-**create_person** | /person | POST | {"name":"Chandler", "surname":"Bing"}* (retorna "person_id" que foi criado)*
-**set_person** | /user/<user_id>/person | POST | {"person_id":"1"}
-**get_person** | /user/<user_id>/person | GET | **
-**get_all_people** | /person | GET | **
-**create_contact** | /contact | POST | {"email": "chandler@friends.com", "phone": "55888999999"}* (retorna "contact_id" que foi criado)
-**set_contact** | /user/id/contact | POST | {"contact_id":"1"}*
-**get_contact** | /user/id/contact | GET |  **
-**create_group** | /group | POST | {"group_name":"jogador"}**
-**get_all_groups** | /group | GET | **
-**set_group** | /user/<user_id>/group | POST | {"group":"jogador"}
-**create_address** | /address | POST | {"street":"Baker", "number":"221", "neighborhood":"Marylebone"}**
-**set_address** | /spot/<address_id>/address | POST | {"address_id":"1"}**
-**get_address** | /spot/<spot_id>/address | GET | **
-**set_spot_contact** | /spot/id/contact | POST | {"group":"jogador"}**
-**get_spot_by_id** | /spot/<spot_id> | GET | **
-**get_my_spots** | /spot/my | GET | retorna os espaços do proprietário logado**
-**get_all_spots** | /spot | GET | retorna todos os espaços**
-**create_state** | /state | POST | {"state_name":"Pernambuco"}**
-**create_city** | /city | POST | {"city_name":"Recife"}**
-**set_state** | /city/<state_id>/state | POST | {"state_name":"Bahia"}**
-**set_city** | /address/<address_id>/city | POST | {"city_id":"5"}**
-**get_city** | /city/<city_id> | GET | **
-**get_state** | /state/<state_id> | GET | **
-**get_all_cities** | /city | GET | **
-**get_all_states** | /state | GET | **
-**save_user_photo** | /user/<user_id>/photo | POST | **
-**get_user_photo** | /user/<user_id>/photo | GET | **
-
-Passar token no header 'x-access-token'
-
-*com token inicial
-
-**com token de usuário logado
 
 #### Gerando o banco de dados:
 
