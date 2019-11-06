@@ -181,6 +181,9 @@ app.register_blueprint(schedule_bp)
 from bookings import booking as booking_bp
 app.register_blueprint(booking_bp)
 
+from teams import team as team_bp
+app.register_blueprint(team_bp)
+
 
 @app.route('/login', methods=['GET'])
 def login():
