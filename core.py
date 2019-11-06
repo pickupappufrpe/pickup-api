@@ -16,6 +16,11 @@ app.config['UPLOAD_FOLDER'] = os.environ.get('UPLOAD_FOLDER')
 db = SQLAlchemy(app)
 
 
+lineups = db.Table('lineups',
+                   db.Column('player_id', db.Integer, db.ForeignKey('user.id')),
+                   db.Column('team_id', db.Integer, db.ForeignKey('team.team_id')))
+
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50))
@@ -25,6 +30,7 @@ class User(db.Model):
     contact_id = db.Column(db.Integer, db.ForeignKey('contact.id'))
     spots = db.relationship("Spot")
     photos = db.relationship("Photo")
+    lineups = db.relationship('Team', secondary=lineups, backref=db.backref('players', lazy='dynamic'))
 
 
 class Person(db.Model):
@@ -111,6 +117,12 @@ class Booking(db.Model):
     end_time = db.Column(db.Time)
     spot_id = db.Column(db.Integer, db.ForeignKey('spot.id'))
     customer_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+
+class Team(db.Model):
+    team_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30))
+    captain_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
 @app.route('/')
