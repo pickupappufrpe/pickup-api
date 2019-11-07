@@ -40,15 +40,14 @@ def get_spot_bookings(current_user, spot_id):
 @booking.route('/booking/my', methods=['GET'])
 @token_required
 def get_my_bookings(current_user):
-    bookings = Booking.query.filter_by(customer_id=current_user.id)
-
+    bookings = Booking.query.join(Spot, Spot.id == Booking.spot_id). \
+            add_columns(Spot.name, Booking.day, Booking.start_time, Booking.end_time). \
+            filter(Booking.customer_id == current_user.id)
     output = []
-
     for b in bookings:
-        spot = Spot.query.filter_by(id=b.spot_id).first()
         bookings_data = {
             'day': b.day,
-            'spot_name': spot.name,
+            'spot_name': b.name,
             'start_time': str(b.start_time),
             'end_time': str(b.end_time),
         }
