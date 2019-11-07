@@ -37,7 +37,7 @@ def get_spot_bookings(current_user, spot_id):
     return {'bookings': output}
 
 
-@booking.route('/spot/booking/my', methods=['GET'])
+@booking.route('/booking/my', methods=['GET'])
 @token_required
 def get_my_bookings(current_user):
     bookings = Booking.query.filter_by(customer_id=current_user.id)
