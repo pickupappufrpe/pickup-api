@@ -125,6 +125,20 @@ class Team(db.Model):
     captain_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
+class Player(db.Model):
+    player_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    position_id = db.Column(db.Integer, db.ForeignKey('position.position_id'))
+    average_rating = db.Column(db.Float)
+    matches_played = db.Column(db.Integer)
+    goals = db.Column(db.Integer)
+
+
+class Position(db.Model):
+    position_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30))
+
+
 @app.route('/')
 def hello_world():
     return 'Hello, World!'
