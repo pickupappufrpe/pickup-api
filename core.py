@@ -69,6 +69,7 @@ class Spot(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30))
     price = db.Column(db.Integer)
+    average_rating = db.Column(db.Float)
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     address_id = db.Column(db.Integer, db.ForeignKey('address.id'))
     contact_id = db.Column(db.Integer, db.ForeignKey('contact.id'))
@@ -137,6 +138,20 @@ class Player(db.Model):
 class Position(db.Model):
     position_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30))
+
+
+class SpotRating(db.Model):
+    rating_id = db.Column(db.Integer, primary_key=True)
+    rating = db.Column(db.Float)
+    spot_id = db.Column(db.Integer, db.ForeignKey('spot.id'))
+    evaluator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+
+class PlayerRating(db.Model):
+    rating_id = db.Column(db.Integer, primary_key=True)
+    rating = db.Column(db.Float)
+    player_id = db.Column(db.Integer, db.ForeignKey('player.player_id'))
+    evaluator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
 @app.route('/')
