@@ -16,11 +16,6 @@ app.config['UPLOAD_FOLDER'] = os.environ.get('UPLOAD_FOLDER')
 db = SQLAlchemy(app)
 
 
-lineups = db.Table('lineups',
-                   db.Column('player_id', db.Integer, db.ForeignKey('user.id')),
-                   db.Column('team_id', db.Integer, db.ForeignKey('team.team_id')))
-
-
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50))
@@ -30,7 +25,8 @@ class User(db.Model):
     contact_id = db.Column(db.Integer, db.ForeignKey('contact.id'))
     spots = db.relationship("Spot")
     photos = db.relationship("Photo")
-    lineups = db.relationship('Team', secondary=lineups, backref=db.backref('players', lazy='dynamic'))
+    players = db.relationship("Player", uselist=False)
+    bookings = db.relationship("Booking")
 
 
 class Person(db.Model):
@@ -75,6 +71,9 @@ class Spot(db.Model):
     contact_id = db.Column(db.Integer, db.ForeignKey('contact.id'))
     ground_id = db.Column(db.Integer, db.ForeignKey('ground.ground_id'))
     photos = db.relationship("Photo")
+    schedules = db.relationship("Schedule")
+    bookings = db.relationship("Booking")
+    ratings = db.relationship("SpotRating")
 
 
 class Ground(db.Model):
@@ -124,6 +123,7 @@ class Team(db.Model):
     team_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30))
     captain_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    lineups = db.relationship("Lineup")
 
 
 class Player(db.Model):
@@ -133,11 +133,14 @@ class Player(db.Model):
     average_rating = db.Column(db.Float)
     matches_played = db.Column(db.Integer)
     goals = db.Column(db.Integer)
+    ratings = db.relationship("PlayerRating")
+    lineups = db.relationship("Lineup")
 
 
 class Position(db.Model):
     position_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30))
+    players = db.relationship("Player", uselist=False)
 
 
 class SpotRating(db.Model):
@@ -152,6 +155,39 @@ class PlayerRating(db.Model):
     rating = db.Column(db.Float)
     player_id = db.Column(db.Integer, db.ForeignKey('player.player_id'))
     evaluator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+
+class Match(db.Model):
+    match_id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.Date)
+    duration = db.Column(db.Integer)
+    start_time = db.Column(db.Time)
+    end_time = db.Column(db.Time)
+    spot_id = db.Column(db.Integer, db.ForeignKey('spot.id'))
+    reports = db.relationship("Report")
+    lineups = db.relationship("Lineup")
+
+
+class Lineup(db.Model):
+    lineup_id = db.Column(db.Integer, primary_key=True)
+    player_id = db.Column(db.Integer, db.ForeignKey('player.player_id'))
+    team_id = db.Column(db.Integer, db.ForeignKey('team.team_id'))
+    match_id = db.Column(db.Integer, db.ForeignKey('match.match_id'))
+
+
+class Report(db.Model):
+    report_id = db.Column(db.Integer, primary_key=True)
+    scoresheet_id = db.Column(db.Integer, db.ForeignKey('scoresheet.scoresheet_id'))
+    time = db.Column(db.Time)
+    reported_id = db.Column(db.Integer, db.ForeignKey('player.player_id'))
+    reporter_id = db.Column(db.Integer, db.ForeignKey('player.player_id'))
+    match_id = db.Column(db.Integer, db.ForeignKey('match.match_id'))
+
+
+class Scoresheet(db.Model):
+    scoresheet_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50))
+    reports = db.relationship("Report")
 
 
 @app.route('/')
