@@ -15,10 +15,10 @@ def save_photo(file, user_id=None, spot_id=None):
     filename = str(uuid.uuid4()) + "." + file.filename.rsplit('.', 1)[1].lower()
     if user_id is not None:
         s3.Bucket(bucket).put_object(Key=filename, Body=file)
-        new_photo = Photo(user_id=user_id, image=filename)
+        new_photo = Photo(user_id=user_id, filename=filename)
         db.session.add(new_photo)
     if spot_id is not None:
         s3.Bucket(bucket).put_object(Key=filename, Body=file)
-        new_photo = Photo(spot_id=spot_id, image=filename)
+        new_photo = Photo(spot_id=spot_id, filename=filename)
         db.session.add(new_photo)
     db.session.commit()

@@ -102,7 +102,7 @@ class Photo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     spot_id = db.Column(db.Integer, db.ForeignKey('spot.id'))
-    image = db.Column(db.String(10485760))
+    filename = db.Column(db.String(40))
 
 
 class Schedule(db.Model):
