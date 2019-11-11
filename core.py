@@ -27,6 +27,7 @@ class User(db.Model):
     photos = db.relationship("Photo")
     players = db.relationship("Player", uselist=False)
     bookings = db.relationship("Booking")
+    matches = db.relationship("Match")
 
 
 class Person(db.Model):
@@ -164,6 +165,7 @@ class Match(db.Model):
     start_time = db.Column(db.Time)
     end_time = db.Column(db.Time)
     spot_id = db.Column(db.Integer, db.ForeignKey('spot.id'))
+    creator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     reports = db.relationship("Report")
     lineups = db.relationship("Lineup")
 
