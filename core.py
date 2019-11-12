@@ -126,6 +126,7 @@ class Team(db.Model):
     team_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30))
     captain_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    match_id = db.Column(db.Integer, db.ForeignKey('match.match_id'))
     lineups = db.relationship("Lineup")
 
 
@@ -170,6 +171,7 @@ class Match(db.Model):
     creator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     reports = db.relationship("Report")
     lineups = db.relationship("Lineup")
+    teams = db.relationship("Team")
 
 
 class Lineup(db.Model):
