@@ -255,6 +255,9 @@ app.register_blueprint(booking_bp)
 from teams import team as team_bp
 app.register_blueprint(team_bp)
 
+from matches import match as match_bp
+app.register_blueprint(match_bp)
+
 
 @app.route('/login', methods=['GET'])
 def login():
