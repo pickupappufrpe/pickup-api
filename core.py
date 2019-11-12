@@ -30,6 +30,7 @@ class User(db.Model):
     matches = db.relationship("Match")
     reporteds = db.relationship("Report", foreign_keys='Report.reported_id')
     reporters = db.relationship("Report", foreign_keys='Report.reporter_id')
+    captains = db.relationship("Team")
 
 
 class Person(db.Model):
@@ -126,8 +127,9 @@ class Team(db.Model):
     team_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30))
     captain_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    match_id = db.Column(db.Integer, db.ForeignKey('match.match_id'))
     lineups = db.relationship("Lineup")
+    homes = db.relationship("Match", foreign_keys='Match.home_team_id')
+    aways = db.relationship("Match", foreign_keys='Match.away_team_id')
 
 
 class Player(db.Model):
@@ -169,6 +171,8 @@ class Match(db.Model):
     end_time = db.Column(db.Time)
     spot_id = db.Column(db.Integer, db.ForeignKey('spot.id'))
     creator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    home_team_id = db.Column(db.Integer, db.ForeignKey('team.team_id'))
+    away_team_id = db.Column(db.Integer, db.ForeignKey('team.team_id'))
     reports = db.relationship("Report")
     lineups = db.relationship("Lineup")
     teams = db.relationship("Team")
