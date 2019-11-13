@@ -26,9 +26,12 @@ class User(db.Model):
     spots = db.relationship("Spot")
     photos = db.relationship("Photo")
     players = db.relationship("Player", uselist=False)
+    goalkeepers = db.relationship("Goalkeeper", uselist=False)
+    referees = db.relationship("Referee", uselist=False)
+    players = db.relationship("Player", uselist=False)
     bookings = db.relationship("Booking")
     matches = db.relationship("Match")
-    reporteds = db.relationship("Report", foreign_keys='Report.reported_id')
+    reported = db.relationship("Report", foreign_keys='Report.reported_id')
     reporters = db.relationship("Report", foreign_keys='Report.reporter_id')
     captains = db.relationship("Team")
 
@@ -137,10 +140,26 @@ class Player(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     position_id = db.Column(db.Integer, db.ForeignKey('position.position_id'))
     average_rating = db.Column(db.Float, default=0)
-    matches_played = db.Column(db.Integer)
+    matches_count = db.Column(db.Integer)
     goals = db.Column(db.Integer)
     ratings = db.relationship("PlayerRating")
     lineups = db.relationship("Lineup")
+
+
+class Goalkeeper(db.Model):
+    goalkeeper_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    average_rating = db.Column(db.Float, default=0)
+    matches_count = db.Column(db.Integer)
+    ratings = db.relationship("GoalkeeperRating")
+
+
+class Referee(db.Model):
+    referee_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    average_rating = db.Column(db.Float, default=0)
+    matches_count = db.Column(db.Integer)
+    ratings = db.relationship("RefereeRating")
 
 
 class Position(db.Model):
@@ -160,6 +179,20 @@ class PlayerRating(db.Model):
     rating_id = db.Column(db.Integer, primary_key=True)
     rating = db.Column(db.Float)
     player_id = db.Column(db.Integer, db.ForeignKey('player.player_id'))
+    evaluator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+
+class GoalkeeperRating(db.Model):
+    rating_id = db.Column(db.Integer, primary_key=True)
+    rating = db.Column(db.Float)
+    goalkeeper_id = db.Column(db.Integer, db.ForeignKey('goalkeeper.goalkeeper_id'))
+    evaluator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+
+class RefereeRating(db.Model):
+    rating_id = db.Column(db.Integer, primary_key=True)
+    rating = db.Column(db.Float)
+    referee_id = db.Column(db.Integer, db.ForeignKey('referee.referee_id'))
     evaluator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
