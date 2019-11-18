@@ -14,8 +14,7 @@ def signup():
                                    data['password'],
                                    data['name'],
                                    data['surname'],
-                                   data['group_id'],
-                                   data['position_id'])
+                                   data['group_id'])
 
         return {'message': 'New user created!', "new_user_id": new_user_id}
     else:

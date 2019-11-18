@@ -1,4 +1,4 @@
-from core import db, User, Person, Player
+from core import db, User, Person, Player, Referee
 from werkzeug.security import generate_password_hash
 
 
@@ -21,17 +21,25 @@ def create_user_query(username, password, person_id, group_id):
     return user.id
 
 
-def create_player_query(user_id, position_id):
-    player = Player(user_id=user_id,
-                    position_id=position_id)
+def create_player_query(user_id):
+    player = Player(user_id=user_id)
     db.session.add(player)
     return True
 
 
-def signup_query(username, password, name, surname, group_id, position_id):
+def create_referee_query(user_id):
+    referee = Referee(user_id=user_id)
+    db.session.add(referee)
+    return True
+
+
+def signup_query(username, password, name, surname, group_id):
     person_id = create_person_query(name, surname)
     user_id = create_user_query(username, password, person_id, group_id)
-    create_player_query(user_id, position_id)
+    if group_id == "1":
+        create_player_query(user_id)
+    if group_id == "3":
+        create_referee_query(user_id)
     db.session.commit()
     return user_id
 
