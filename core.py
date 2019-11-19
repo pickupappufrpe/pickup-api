@@ -233,6 +233,27 @@ class Scoresheet(db.Model):
     reports = db.relationship("Report")
 
 
+class PlayerInvite(db.Model):
+    playerinvite_id = db.Column(db.Integer, primary_key=True)
+    player_id = db.Column(db.Integer, db.ForeignKey('player.player_id'))
+    booking_id = db.Column(db.Integer, db.ForeignKey('booking.booking_id'))
+    status = db.column(db.Boolean)
+
+
+class RefereeInvite(db.Model):
+    refereeinvite_id = db.Column(db.Integer, primary_key=True)
+    referee_id = db.Column(db.Integer, db.ForeignKey('referee.referee_id'))
+    booking_id = db.Column(db.Integer, db.ForeignKey('booking.booking_id'))
+    status = db.column(db.Boolean)
+
+
+class GoalkeeperInvite(db.Model):
+    goalkeeperinvite_id = db.Column(db.Integer, primary_key=True)
+    goalkeeper_id = db.Column(db.Integer, db.ForeignKey('goalkeeper.goalkeeper_id'))
+    booking_id = db.Column(db.Integer, db.ForeignKey('booking.booking_id'))
+    status = db.column(db.Boolean)
+
+
 @app.route('/')
 def hello_world():
     return 'Hello, World!'
