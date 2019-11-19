@@ -124,6 +124,10 @@ class Booking(db.Model):
     end_time = db.Column(db.Time)
     spot_id = db.Column(db.Integer, db.ForeignKey('spot.id'))
     customer_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    lineups = db.relationship('Lineup')
+    player_invites = db.relationship('PlayerInvite')
+    referee_invites = db.relationship('RefereeInvite')
+    goalkeeper_invites = db.relationship('GoalkeeperInvite')
 
 
 class Team(db.Model):
@@ -214,8 +218,7 @@ class Match(db.Model):
 class Lineup(db.Model):
     lineup_id = db.Column(db.Integer, primary_key=True)
     player_id = db.Column(db.Integer, db.ForeignKey('player.player_id'))
-    team_id = db.Column(db.Integer, db.ForeignKey('team.team_id'))
-    match_id = db.Column(db.Integer, db.ForeignKey('match.match_id'))
+    booking_id = db.Column(db.Integer, db.ForeignKey('booking.booking_id'))
 
 
 class Report(db.Model):
