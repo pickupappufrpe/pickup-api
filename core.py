@@ -322,6 +322,9 @@ app.register_blueprint(team_bp)
 from matches import match as match_bp
 app.register_blueprint(match_bp)
 
+from players import player as player_bp
+app.register_blueprint(player_bp)
+
 
 @app.route('/login', methods=['GET'])
 def login():
