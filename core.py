@@ -148,6 +148,7 @@ class Player(db.Model):
     goals = db.Column(db.Integer)
     ratings = db.relationship("PlayerRating")
     lineups = db.relationship("Lineup")
+    invites = db.relationship("PlayerInvite")
 
 
 class Goalkeeper(db.Model):
@@ -156,6 +157,7 @@ class Goalkeeper(db.Model):
     average_rating = db.Column(db.Float, default=0)
     matches_count = db.Column(db.Integer)
     ratings = db.relationship("GoalkeeperRating")
+    invites = db.relationship("GoalkeeperInvite")
 
 
 class Referee(db.Model):
@@ -164,6 +166,7 @@ class Referee(db.Model):
     average_rating = db.Column(db.Float, default=0)
     matches_count = db.Column(db.Integer)
     ratings = db.relationship("RefereeRating")
+    invites = db.relationship("RefereeInvite")
 
 
 class Position(db.Model):
