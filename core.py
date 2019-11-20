@@ -213,7 +213,6 @@ class Match(db.Model):
     home_team_id = db.Column(db.Integer, db.ForeignKey('team.team_id'))
     away_team_id = db.Column(db.Integer, db.ForeignKey('team.team_id'))
     reports = db.relationship("Report")
-    lineups = db.relationship("Lineup")
     teams = db.relationship("Team")
 
 
