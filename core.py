@@ -243,6 +243,7 @@ class PlayerInvite(db.Model):
     player_id = db.Column(db.Integer, db.ForeignKey('player.player_id'))
     booking_id = db.Column(db.Integer, db.ForeignKey('booking.booking_id'))
     status = db.Column(db.Boolean, default=False)
+    answered = db.Column(db.Boolean, default=False)
 
 
 class RefereeInvite(db.Model):
@@ -250,6 +251,8 @@ class RefereeInvite(db.Model):
     referee_id = db.Column(db.Integer, db.ForeignKey('referee.referee_id'))
     booking_id = db.Column(db.Integer, db.ForeignKey('booking.booking_id'))
     status = db.Column(db.Boolean)
+    answered = db.Column(db.Boolean, default=False)
+
 
 
 class GoalkeeperInvite(db.Model):
@@ -257,6 +260,7 @@ class GoalkeeperInvite(db.Model):
     goalkeeper_id = db.Column(db.Integer, db.ForeignKey('goalkeeper.goalkeeper_id'))
     booking_id = db.Column(db.Integer, db.ForeignKey('booking.booking_id'))
     status = db.Column(db.Boolean)
+    answered = db.Column(db.Boolean, default=False)
 
 
 @app.route('/')
