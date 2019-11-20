@@ -62,17 +62,3 @@ def delete_user(current_user, user_id):
     db.session.commit()
 
     return {'message': 'The user has been deleted!'}
-
-
-@user.route('/players', methods=['GET'])
-@token_required
-def get_players(current_user):
-    target = get_players_query()
-    players = []
-    for player in target:
-        player_data = {'username': player.username,
-                       'name': player.name,
-                       'surname': player.surname}
-        players.append(player_data)
-
-    return {'players': players}
