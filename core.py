@@ -325,6 +325,9 @@ app.register_blueprint(match_bp)
 from players import player as player_bp
 app.register_blueprint(player_bp)
 
+from referees import referee as referee_bp
+app.register_blueprint(referee_bp)
+
 
 @app.route('/login', methods=['GET'])
 def login():
