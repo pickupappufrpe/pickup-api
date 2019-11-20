@@ -31,8 +31,6 @@ class User(db.Model):
     players = db.relationship("Player", uselist=False)
     bookings = db.relationship("Booking")
     matches = db.relationship("Match")
-    reported = db.relationship("Report", foreign_keys='Report.reported_id')
-    reporters = db.relationship("Report", foreign_keys='Report.reporter_id')
     captains = db.relationship("Team")
 
 
@@ -149,6 +147,8 @@ class Player(db.Model):
     ratings = db.relationship("PlayerRating")
     lineups = db.relationship("Lineup")
     invites = db.relationship("PlayerInvite")
+    reported = db.relationship("Report", foreign_keys='Report.reported_id')
+    reporters = db.relationship("Report", foreign_keys='Report.reporter_id')
 
 
 class Goalkeeper(db.Model):
