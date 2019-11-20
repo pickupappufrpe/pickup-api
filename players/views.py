@@ -1,6 +1,6 @@
 from flask import request
 
-from core import db, Player, User, Person, PlayerInvite, token_required
+from core import db, Player, User, Person, PlayerInvite, token_required, Lineup
 from . import player
 
 
@@ -49,12 +49,16 @@ def get_my_invites(current_user):
     return {'bookings': output}
 
 
-@player.route('/players/invites/accept/<invite_id>', methods=['PUT'])
+@player.route('/players/invites/accept', methods=['POST'])
 @token_required
-def accept_invite(current_user, invite_id):
-    invite = PlayerInvite.query.filter_by(invite_id=invite_id)
+def accept_invite(current_user):
+    data = request.get_json()
+    invite = PlayerInvite.query.filter_by(invite_id=data['invite_id'])
     invite.status = True
     invite.answered = True
     db.session.add(invite)
+    lineup = Lineup(player_id=data['player_id'],
+                    booking_id=data['booking_id'])
+    db.session.add(lineup)
     db.session.commit()
     return {'message': 'Success!'}
