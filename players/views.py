@@ -36,8 +36,8 @@ def invite_player(current_user):
 @player.route('/players/invites/my')
 @token_required
 def get_my_invites(current_user):
-    player = Player.query.filter_by(user_id=current_user.id).first()
-    invites = PlayerInvite.query.filter_by(player_id=player.player_id)
+    target = Player.query.filter_by(user_id=current_user.id).first()
+    invites = PlayerInvite.query.filter_by(player_id=target.player_id)
 
     output = []
 
