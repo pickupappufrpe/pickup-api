@@ -132,8 +132,6 @@ class Team(db.Model):
     team_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30))
     captain_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    homes = db.relationship("Match", foreign_keys='Match.home_team_id')
-    aways = db.relationship("Match", foreign_keys='Match.away_team_id')
 
 
 class Player(db.Model):
@@ -213,7 +211,6 @@ class Match(db.Model):
     home_team_id = db.Column(db.Integer, db.ForeignKey('team.team_id'))
     away_team_id = db.Column(db.Integer, db.ForeignKey('team.team_id'))
     reports = db.relationship("Report")
-    teams = db.relationship("Team")
 
 
 class Lineup(db.Model):
