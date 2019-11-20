@@ -33,7 +33,7 @@ def invite_player(current_user):
     return {'message': 'Success!'}
 
 
-@player.route('/players/invites/my')
+@player.route('/players/invites/my', methods=['GET'])
 @token_required
 def get_my_invites(current_user):
     target = Player.query.filter_by(user_id=current_user.id).first()
@@ -47,3 +47,14 @@ def get_my_invites(current_user):
         output.append(invite_data)
 
     return {'bookings': output}
+
+
+@player.route('/players/invites/accept/<invite_id>', methods=['PUT'])
+@token_required
+def accept_invite(current_user, invite_id):
+    invite = PlayerInvite.query.filter_by(invite_id=invite_id)
+    invite.status = True
+    invite.answered = True
+    db.session.add(invite)
+    db.session.commit()
+    return {'message': 'Success!'}
