@@ -12,10 +12,10 @@ def get_players(current_user):
 
     output = []
     for p in target:
-        player_data = {'name': target.name,
-                       'surname': target.surname,
-                       'matches_count': target.matches_count,
-                       'average_rating': target.average_rating}
+        player_data = {'name': p.name,
+                       'surname': p.surname,
+                       'matches_count': p.matches_count,
+                       'average_rating': p.average_rating}
         output.append(player_data)
 
     return {'players': output}
