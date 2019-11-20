@@ -22,7 +22,7 @@ def get_players(current_user):
     return {'players': output}
 
 
-@player.route('players/invite', methods=['post'])
+@player.route('/players/invites', methods=['post'])
 @token_required
 def invite_player(current_user):
     data = request.get_json()
@@ -31,3 +31,19 @@ def invite_player(current_user):
     db.session.add(invite)
     db.session.flush()
     return {'message': 'Success!'}
+
+
+@player.route('/players/invites/my')
+@token_required
+def get_my_invites(current_user):
+    player = Player.query.filter_by(user_id=current_user.id).first()
+    invites = PlayerInvite.query.filter_by(player_id=player.player_id)
+
+    output = []
+
+    for i in invites:
+        invite_data = {'booking_id': i.booking_id,
+                       'status': i.status}
+        output.append(invite_data)
+
+    return {'bookings': output}
