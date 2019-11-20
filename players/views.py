@@ -1,6 +1,7 @@
-from . import player
+from flask import request
 
-from core import Player, User, Person, token_required
+from core import db, Player, User, Person, PlayerInvite, token_required
+from . import player
 
 
 @player.route('/players', methods=['GET'])
@@ -19,3 +20,14 @@ def get_players(current_user):
         output.append(player_data)
 
     return {'players': output}
+
+
+@player.route('players/invite', methods=['post'])
+@token_required
+def invite_player(current_user):
+    data = request.get_json()
+    invite = PlayerInvite(player_id=data['player_id'],
+                          booking_id=data['booking_id'])
+    db.session.add(invite)
+    db.session.flush()
+    return {'message': 'Success!'}

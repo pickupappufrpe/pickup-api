@@ -122,6 +122,8 @@ class Booking(db.Model):
     end_time = db.Column(db.Time)
     spot_id = db.Column(db.Integer, db.ForeignKey('spot.id'))
     customer_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    referee_id = db.Column(db.Integer, db.ForeignKey('referee.referee_id'))
+    goalkeeper_id = db.Column(db.Integer, db.ForeignKey('goalkeeper.goalkeeper_id'))
     lineups = db.relationship('Lineup')
     player_invites = db.relationship('PlayerInvite')
     referee_invites = db.relationship('RefereeInvite')
@@ -155,6 +157,7 @@ class Goalkeeper(db.Model):
     matches_count = db.Column(db.Integer)
     ratings = db.relationship("GoalkeeperRating")
     invites = db.relationship("GoalkeeperInvite")
+    bookings = db.relationship("Booking")
 
 
 class Referee(db.Model):
@@ -164,6 +167,7 @@ class Referee(db.Model):
     matches_count = db.Column(db.Integer)
     ratings = db.relationship("RefereeRating")
     invites = db.relationship("RefereeInvite")
+    bookings = db.relationship("Booking")
 
 
 class Position(db.Model):
@@ -238,7 +242,7 @@ class PlayerInvite(db.Model):
     playerinvite_id = db.Column(db.Integer, primary_key=True)
     player_id = db.Column(db.Integer, db.ForeignKey('player.player_id'))
     booking_id = db.Column(db.Integer, db.ForeignKey('booking.booking_id'))
-    status = db.Column(db.Boolean)
+    status = db.Column(db.Boolean, default=False)
 
 
 class RefereeInvite(db.Model):
