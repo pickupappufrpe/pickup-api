@@ -43,7 +43,8 @@ def get_my_invites(current_user):
 
     for i in invites:
         invite_data = {'booking_id': i.booking_id,
-                       'status': i.status}
+                       'status': i.status,
+                       'invite_id': i.playerinvite_id}
         output.append(invite_data)
 
     return {'bookings': output}
