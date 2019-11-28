@@ -1,6 +1,6 @@
 from flask import request
 
-from core import Spot, token_required
+from core import Spot, token_required, SpotRating, db
 from . import spot
 from .controls import create_address_query, create_contact_query, create_spot_query, render_spot_group
 
@@ -39,3 +39,15 @@ def get_my_spots(current_user):
 def get_all_spots(current_user):
     spots = Spot.query.all()
     return render_spot_group(spots)
+
+
+@spot.route('/spot/rate', methods=['POST'])
+@token_required
+def rate_spot(current_user):
+    data = request.get_json()
+    rating = SpotRating(rating=data['rating'],
+                        spot_id=data['spot_id'],
+                        evaluator_id=current_user.id)
+    db.session.add(rating)
+    db.session.commit()
+    return {'message': 'Success!'}
