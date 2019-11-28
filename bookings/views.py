@@ -48,6 +48,7 @@ def get_my_bookings(current_user):
         bookings_data = {
             'day': b.day,
             'id': b.booking_id,
+            'spot_id': b.spot_id,
             'spot_name': b.name,
             'start_time': str(b.start_time),
             'end_time': str(b.end_time),
