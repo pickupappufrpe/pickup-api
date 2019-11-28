@@ -69,6 +69,7 @@ def get_my_spots_bookings(current_user): # TODO: refactor, create control functi
             bookings_data = {
                 'day': b.day,
                 'spot_id': b.spot_id,
+                'spot_name':i.name,
                 'start_time': str(b.start_time),
                 'end_time': str(b.end_time)
             }
