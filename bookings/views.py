@@ -1,7 +1,7 @@
 from . import booking
 
 from flask import request
-from core import token_required, Booking, Spot
+from core import token_required, Booking, Spot, Lineup, Player, Person, User
 from .controls import add_booking_query
 
 
@@ -78,3 +78,23 @@ def get_my_spots_bookings(current_user): # TODO: refactor, create control functi
             spot_bookings.append(bookings_data)
     output.append(spot_bookings)
     return {'bookings': output}
+
+
+@booking.route('/booking/<booking_id>/players', methods=['GET'])
+@token_required
+def get_booking_players(current_user, booking_id):
+    lineups = Lineup.query.filter_by(booking_id=booking_id)
+    output = []
+    for l in lineups:
+        player = Player.query.filter_by(player_id=l.player_id)
+        target = Player.query.join(User, player.user_id == User.id). \
+            join(Person, User.person_id == Person.id). \
+            add_columns(Person.name, Person.surname, Player.matches_count, Player.average_rating).first()
+
+        player_data = {'name': target.name,
+                       'surname': target.surname,
+                       'matches_count': target.matches_count,
+                       'average_rating': target.average_rating}
+        output.append(player_data)
+
+        return {'players': output}
