@@ -64,9 +64,7 @@ def get_my_spots_bookings(current_user): # TODO: refactor, create control functi
     my_spots = Spot.query.filter_by(owner_id=current_user.id)
     for i in my_spots:
         bookings = Booking.query.filter_by(spot_id=i.id)
-
-        spot_bookings = []
-
+        # spot_bookings = []
         for b in bookings:
             bookings_data = {
                 'day': b.day,
@@ -74,9 +72,8 @@ def get_my_spots_bookings(current_user): # TODO: refactor, create control functi
                 'start_time': str(b.start_time),
                 'end_time': str(b.end_time)
             }
-
-            spot_bookings.append(bookings_data)
-    output.append(spot_bookings)
+            # spot_bookings.append(bookings_data)
+            output.append(spot_bookings)
     return {'bookings': output}
 
 
