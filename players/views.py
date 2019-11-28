@@ -31,6 +31,7 @@ def invite_player(current_user):
                           booking_id=data['booking_id'])
     db.session.add(invite)
     db.session.flush()
+    db.session.commit()
     return {'message': 'Success!'}
 
 
