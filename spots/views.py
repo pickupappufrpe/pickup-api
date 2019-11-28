@@ -2,7 +2,7 @@ from flask import request
 
 from core import Spot, token_required, SpotRating, db
 from . import spot
-from .controls import create_address_query, create_contact_query, create_spot_query, render_spot_group
+from .controls import create_address_query, create_contact_query, create_spot_query, render_spot_group, render_spot
 
 
 @spot.route('/spot', methods=['POST'])
