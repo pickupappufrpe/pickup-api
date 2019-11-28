@@ -40,6 +40,12 @@ def get_all_spots(current_user):
     spots = Spot.query.all()
     return render_spot_group(spots)
 
+@spot.route('/spot/<spot_id>', methods=['GET'])
+@token_required
+def get_all_spots(current_user):
+    spot = Spot.query.filter_by(id=spot_id)
+    return render_spot(spot)
+
 
 @spot.route('/spot/rate', methods=['POST'])
 @token_required
