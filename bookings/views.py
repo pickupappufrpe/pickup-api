@@ -73,7 +73,7 @@ def get_my_spots_bookings(current_user): # TODO: refactor, create control functi
                 'end_time': str(b.end_time)
             }
             # spot_bookings.append(bookings_data)
-            output.append(spot_bookings)
+            output.append(bookings_data)
     return {'bookings': output}
 
 
