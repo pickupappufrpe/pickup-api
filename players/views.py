@@ -45,10 +45,11 @@ def get_my_invites(current_user):
     for i in invites:
         invite_data = {'booking_id': i.booking_id,
                        'status': i.status,
-                       'invite_id': i.playerinvite_id}
+                       'invite_id': i.playerinvite_id,
+                       'player_id': i.player_id}
         output.append(invite_data)
 
-    return {'bookings': output}
+    return {'invites': output}
 
 
 @player.route('/players/invites/accept', methods=['POST'])
