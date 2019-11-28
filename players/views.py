@@ -22,7 +22,7 @@ def get_players(current_user):
     return {'players': output}
 
 
-@player.route('/players/invites', methods=['post'])
+@player.route('/players/invites', methods=['POST'])
 @token_required
 def invite_player(current_user):
     data = request.get_json()
