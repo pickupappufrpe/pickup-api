@@ -41,12 +41,13 @@ def get_spot_bookings(current_user, spot_id):
 @token_required
 def get_my_bookings(current_user):
     bookings = Booking.query.join(Spot, Spot.id == Booking.spot_id). \
-            add_columns(Spot.name, Booking.day, Booking.start_time, Booking.end_time). \
+            add_columns(Booking.booking_id, Spot.name, Booking.day, Booking.start_time, Booking.end_time). \
             filter(Booking.customer_id == current_user.id)
     output = []
     for b in bookings:
         bookings_data = {
             'day': b.day,
+            'id': b.booking_id,
             'spot_name': b.name,
             'start_time': str(b.start_time),
             'end_time': str(b.end_time),
