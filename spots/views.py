@@ -42,7 +42,7 @@ def get_all_spots(current_user):
 
 @spot.route('/spot/<spot_id>', methods=['GET'])
 @token_required
-def get_all_spots(current_user):
+def get_all_spots(current_user,spot_id):
     spot = Spot.query.filter_by(id=spot_id)
     return render_spot(spot)
 
