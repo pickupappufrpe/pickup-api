@@ -59,6 +59,24 @@ def get_my_bookings(current_user):
     return {'bookings': output}
 
 
+@booking.route('/booking/my/invited', methods=['GET'])
+@token_required
+def get_my_invited_bookings(current_user):
+    player = Player.query.filter_by(user_id=current_user.id).first()
+    lineups = Lineup.query.filter_by(player_id=player.player_id)
+    output = []
+    for l in lineups:
+        target = Booking.query.filter_by(booking_id=l.booking_id).first()
+        spot = Spot.query.filter_by(id=target.spot_id).first()
+        output.append({
+                'day': booking.day,
+                'spot_id': booking.spot_id,
+                'spot_name': spot.name,
+                'start_time': str(booking.start_time),
+                'end_time': str(booking.end_time)})
+    return {'bookings': output}
+
+
 @booking.route('/booking/my/owner', methods=['GET'])
 @token_required
 def get_my_spots_bookings(current_user): # TODO: refactor, create control functions to reuse in get_spot_bookings
