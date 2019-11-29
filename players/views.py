@@ -1,6 +1,6 @@
 from flask import request
 
-from core import db, Player, User, Person, PlayerInvite, token_required, Lineup
+from core import db, Player, User, Person, PlayerInvite, token_required, Lineup, Booking
 from . import player
 
 
