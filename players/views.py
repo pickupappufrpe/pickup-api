@@ -44,7 +44,10 @@ def get_my_invites(current_user):
     output = []
 
     for i in invites:
+        booking = Booking.query.filter_by(booking_id = i.booking_id).first()
+        spot = Spot.query.filter_by(id = booking.spot_id).first()
         invite_data = {'booking_id': i.booking_id,
+                       'spot_id':spot.id,
                        'status': i.status,
                        'invite_id': i.playerinvite_id,
                        'player_id': i.player_id}
