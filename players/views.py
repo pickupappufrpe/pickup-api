@@ -57,7 +57,7 @@ def get_my_invites(current_user):
 @token_required
 def accept_invite(current_user):
     data = request.get_json()
-    invite = PlayerInvite.query.filter_by(playerinvite_id=data['playerinvite_id'])
+    invite = PlayerInvite.query.filter_by(playerinvite_id=data['playerinvite_id']).first()
     invite.status = True
     invite.answered = True
     db.session.add(invite)
