@@ -86,7 +86,7 @@ def get_booking_players(current_user, booking_id):
     lineups = Lineup.query.filter_by(booking_id=booking_id)
     output = []
     for l in lineups:
-        player = Player.query.filter_by(player_id=l.player_id)
+        player = Player.query.filter_by(player_id=l.player_id).first()
         target = Player.query.join(User, player.user_id == User.id). \
             join(Person, User.person_id == Person.id). \
             add_columns(Person.name, Person.surname, Player.matches_count, Player.average_rating).first()
