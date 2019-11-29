@@ -62,10 +62,10 @@ def get_spot_photo_list(current_user, spot_id):
     return {'spot_photos': photo_list}
 
 
-@photo.route('/user/<user_id>/photo/list', methods=['GET'])
+@photo.route('/user/photo/list', methods=['GET'])
 @token_required
-def get_user_photo_list(current_user, user_id):
-    target = Photo.query.filter_by(user_id=user_id)
+def get_user_photo_list(current_user):
+    target = Photo.query.filter_by(user_id=current_user.id)
     photo_list = []
     for i in target:
         photo_list.append({"filename": i.filename})
