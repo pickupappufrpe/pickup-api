@@ -69,6 +69,7 @@ def get_my_invited_bookings(current_user):
         target = Booking.query.filter_by(booking_id=l.booking_id).first()
         spot = Spot.query.filter_by(id=target.spot_id).first()
         output.append({
+                'id': target.booking_id,
                 'day': target.day,
                 'spot_id': target.spot_id,
                 'spot_name': spot.name,
