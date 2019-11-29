@@ -44,7 +44,7 @@ def get_all_spots(current_user):
 @spot.route('/spot/<spot_id>', methods=['GET'])
 @token_required
 def get_spot_by_id(current_user, spot_id):
-    target = Spot.query.filter_by(id=spot_id)
+    target = Spot.query.filter_by(id=spot_id).first()
     return render_spot(target)
 
 
