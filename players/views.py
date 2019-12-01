@@ -36,7 +36,7 @@ def invite_player(current_user):
     return {'message': 'Success!'}
 
 
-@player.route('/players/invites/my', methods=['GET'])
+@player.route('/players/invites/guest', methods=['GET'])
 @token_required
 def get_my_invites(current_user):  # Return invites sent to the logged player.
     target = Player.query.filter_by(user_id=current_user.id).first()
