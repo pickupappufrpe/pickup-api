@@ -27,7 +27,8 @@ def get_players(current_user):
 @token_required
 def invite_player(current_user):
     data = request.get_json()
-    invite = PlayerInvite(player_id=data['player_id'],
+    invite = PlayerInvite(guest_id=data['guest_id'],
+                          host_id=data['host_id'],
                           booking_id=data['booking_id'])
     db.session.add(invite)
     db.session.flush()
@@ -50,7 +51,8 @@ def get_my_invites(current_user):
                        'spot_id': spot.id,
                        'status': i.status,
                        'invite_id': i.playerinvite_id,
-                       'player_id': i.player_id}
+                       'guest_id': i.guest_id,
+                       'host_id': i.host_id}
         output.append(invite_data)
 
     return {'invites': output}
