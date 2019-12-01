@@ -145,8 +145,8 @@ class Player(db.Model):
     goals = db.Column(db.Integer)
     ratings = db.relationship("PlayerRating")
     lineups = db.relationship("Lineup")
-    guests = db.relationship("PlayerInvite", fireign_keys='PlayerInvite.guest_id')
-    hosts = db.relationship("PlayerInvite", fireign_keys='PlayerInvite.host_id')
+    guests = db.relationship("PlayerInvite", foreign_keys='PlayerInvite.guest_id')
+    hosts = db.relationship("PlayerInvite", foreign_keys='PlayerInvite.host_id')
     reported = db.relationship("Report", foreign_keys='Report.reported_id')
     reporters = db.relationship("Report", foreign_keys='Report.reporter_id')
 
