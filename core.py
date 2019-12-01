@@ -145,7 +145,8 @@ class Player(db.Model):
     goals = db.Column(db.Integer)
     ratings = db.relationship("PlayerRating")
     lineups = db.relationship("Lineup")
-    invites = db.relationship("PlayerInvite")
+    guests = db.relationship("PlayerInvite", fireign_keys='PlayerInvite.guest_id')
+    hosts = db.relationship("PlayerInvite", fireign_keys='PlayerInvite.host_id')
     reported = db.relationship("Report", foreign_keys='Report.reported_id')
     reporters = db.relationship("Report", foreign_keys='Report.reporter_id')
 
@@ -240,7 +241,8 @@ class Scoresheet(db.Model):
 
 class PlayerInvite(db.Model):
     playerinvite_id = db.Column(db.Integer, primary_key=True)
-    player_id = db.Column(db.Integer, db.ForeignKey('player.player_id'))
+    guest_id = db.Column(db.Integer, db.ForeignKey('player.player_id'))
+    host_id = db.Column(db.Integer, db.ForeignKey('player.player_id'))
     booking_id = db.Column(db.Integer, db.ForeignKey('booking.booking_id'))
     status = db.Column(db.Boolean, default=False)
     answered = db.Column(db.Boolean, default=False)
