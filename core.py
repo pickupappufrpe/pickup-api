@@ -254,7 +254,6 @@ class RefereeInvite(db.Model):
     answered = db.Column(db.Boolean, default=False)
 
 
-
 class GoalkeeperInvite(db.Model):
     goalkeeperinvite_id = db.Column(db.Integer, primary_key=True)
     goalkeeper_id = db.Column(db.Integer, db.ForeignKey('goalkeeper.goalkeeper_id'))
