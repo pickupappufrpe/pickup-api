@@ -8,7 +8,7 @@ from . import player
 @token_required
 def get_players(current_user):
     target = Player.query.join(User, Player.user_id == User.id).\
-        join(Person, User.person_id == Person.id and User.id != current_user.id).\
+        join(Person, User.person_id == Person.id).filter(User.id != current_user.id).\
         add_columns(Player.player_id, Person.name, Person.surname, Player.matches_count, Player.average_rating)
 
     output = []
