@@ -117,7 +117,7 @@ def get_booking_players(current_user, booking_id):
             add_columns(Person.name,
                         Person.surname,
                         Player.matches_count,
-                        Player.average_rating)
+                        Player.average_rating).first()
 
         player_data = {'name': target.name,
                        'surname': target.surname,
