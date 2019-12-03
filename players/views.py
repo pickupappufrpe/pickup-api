@@ -27,7 +27,7 @@ def get_players(current_user):
 @player.route('/players/<user_id>', methods=['GET'])
 @token_required
 def get_player_by_user_id(current_user, user_id):
-    target = Player.query.filter_by(user_id=user_id).fist()
+    target = Player.query.filter_by(user_id=user_id).first()
     return {'player_id': target.player_id}
 
 
