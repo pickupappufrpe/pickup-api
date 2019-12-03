@@ -110,9 +110,7 @@ def get_my_spots_bookings(current_user): # TODO: refactor, create control functi
 def get_booking_players(current_user, booking_id):
     lineups = Lineup.query.filter_by(booking_id=booking_id)
     output = []
-    print(lineups.count())
     for l in lineups:
-        print('pass')
         player = Player.query.filter_by(player_id=l.player_id).first()
         user = User.query.filter_by(id=player.user_id).first()
         person = Person.query.filter_by(id=user.person_id).first()
