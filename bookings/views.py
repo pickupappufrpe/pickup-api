@@ -42,7 +42,12 @@ def get_spot_bookings(current_user, spot_id):
 @token_required
 def get_my_bookings(current_user):
     bookings = Booking.query.join(Spot, Spot.id == Booking.spot_id). \
-            add_columns(Booking.spot_id,Booking.booking_id, Spot.name, Booking.day, Booking.start_time, Booking.end_time). \
+            add_columns(Booking.spot_id,
+                        Booking.booking_id,
+                        Spot.name,
+                        Booking.day,
+                        Booking.start_time,
+                        Booking.end_time). \
             filter(Booking.customer_id == current_user.id)
     output = []
     for b in bookings:
@@ -109,7 +114,10 @@ def get_booking_players(current_user, booking_id):
         player = Player.query.filter_by(player_id=l.player_id).first()
         target = Player.query.join(User, player.user_id == User.id). \
             join(Person, User.person_id == Person.id). \
-            add_columns(Person.name, Person.surname, Player.matches_count, Player.average_rating).first()
+            add_columns(Person.name,
+                        Person.surname,
+                        Player.matches_count,
+                        Player.average_rating)
 
         player_data = {'name': target.name,
                        'surname': target.surname,
