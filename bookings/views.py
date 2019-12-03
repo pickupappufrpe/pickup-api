@@ -123,4 +123,4 @@ def get_booking_players(current_user, booking_id):
                        'average_rating': player.average_rating}
         output.append(player_data)
 
-        return {'players': output}
+    return {'players': output}
