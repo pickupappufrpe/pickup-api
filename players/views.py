@@ -55,9 +55,9 @@ def get_my_invites(current_user):  # Return invites sent to the logged player.
     for i in invites:
         booking = Booking.query.filter_by(booking_id=i.booking_id).first()
         spot = Spot.query.filter_by(id=booking.spot_id).first()
-        host_player = Player.query.filter_by(player_id=i.host_id)
-        host_user = User.query.filter_by(id=host_player.user_id)
-        host_person = Person.query.filter_by(id=host_user.person_id)  # TODO: refactor queries
+        host_player = Player.query.filter_by(player_id = i.host_id).first()
+        host_user = User.query.filter_by(id=host_player.user_id).first()
+        host_person = Person.query.filter_by(id=host_user.person_id).first()  # TODO: refactor queries
         invite_data = {'booking_id': i.booking_id,
                        'spot_name': spot.name,
                        'spot_id':spot.id,
