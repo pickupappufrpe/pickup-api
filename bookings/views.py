@@ -13,7 +13,8 @@ def add_booking(current_user):
                          data['day'],
                          data['start_time'],
                          data['end_time'],
-                         current_user.id):
+                         current_user.id,
+                         current_user):
         return {'message': 'Booking saved!'}
 
 
