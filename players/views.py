@@ -8,8 +8,9 @@ from . import player
 @token_required
 def get_players(current_user):
     target = Player.query.join(User, Player.user_id == User.id).\
-        join(Person, User.person_id == Person.id).filter(User.id != current_user.id).\
-        add_columns(Player.player_id, Person.name, Person.surname, Player.matches_count, Player.average_rating)
+             join(Person, User.person_id == Person.id).\
+             filter(User.id != current_user.id).\
+             add_columns(Player.player_id, Person.name, Person.surname, Player.matches_count, Player.average_rating)
 
     output = []
     for p in target:
@@ -21,6 +22,13 @@ def get_players(current_user):
         output.append(player_data)
 
     return {'players': output}
+
+
+@player.route('/players/<user_id>', methods=['GET'])
+@token_required
+def get_player_by_user_id(current_user, user_id):
+    target = Player.query.filter_by(user_id=user_id).fist()
+    return {'player_id': target.player_id}
 
 
 @player.route('/players/invites', methods=['POST'])
