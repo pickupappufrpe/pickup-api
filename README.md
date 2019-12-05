@@ -17,7 +17,15 @@ método | endpoint | request | obs:
 **get_user_by_id** | /user/<user_id> | GET | Retorna usuário com todos os atributos preenchidos.
 **get_user_by_username** | /user/username/<username> | GET | Retorna usuário com todos os atributos preenchidos.
 **delete_user** | /user/<user_id> | DELETE | Delete um usuário
+
+#### players:
+método | endpoint | request | obs:
+------------ | ------------- | ------------- | -------------
 **get_players** | /players | GET | Retorna usuários do tipo jogador.
+**get_player_by_user_id** | /players/<user_id> | GET |
+**invite_player** | /players/invites | POST | {'guest_id': '10', 'host_id': '87', 'booking_id': '48'}. 'host_id' e 'guest_id' devem ser ids de 'player'.
+**get_my_invites** | /players/invites/guest | GET |
+**accept_invite** | /players/invites/accept | POST | {'playerinvite_id': 22, 'player_id': '10', 'booking_id': '48'}
 
 #### addresses:
 método | endpoint | request | obs:
