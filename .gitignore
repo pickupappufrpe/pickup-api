@@ -1,7 +1,7 @@
-
 .idea/workspace.xml
 .idea/vcs.xml
 .idea/pickup-api.iml
 .idea/modules.xml
 .idea/misc.xml
 database.db
+.env

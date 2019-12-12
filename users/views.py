@@ -27,6 +27,33 @@ def signup():
         return {'message': 'User already exist!'}
 
 
+@user.route('/login', methods=['GET'])
+def login():
+    auth = request.authorization
+    asked_group = request.args.get("user_group")
+    if not auth or not auth.username or not auth.password:
+        return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
+
+    result = User.query.filter_by(username=auth.username, group_id= asked_group).first()
+
+    if not result:
+        return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
+
+    # if user.group_id != int(asked_group):
+    #     return {'message': "Wrong user group!"}
+
+    if check_password_hash(result.password, auth.password):
+        token = jwt.encode({
+                            'id': str(result.id),
+                            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
+                            },
+                           app.config['SECRET_KEY'])
+
+        return {'token': token.decode('UTF-8')}
+
+    return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
+
+
 @user.route('/user/<user_id>', methods=['GET'])
 @token_required
 def get_user_by_id(current_user, user_id):
@@ -68,30 +95,3 @@ def delete_user(current_user, user_id):
     db.session.commit()
 
     return {'message': 'The user has been deleted!'}
-
-
-@user.route('/login', methods=['GET'])
-def login():
-    auth = request.authorization
-    asked_group = request.args.get("user_group")
-    if not auth or not auth.username or not auth.password:
-        return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
-
-    result = User.query.filter_by(username=auth.username, group_id= asked_group).first()
-
-    if not result:
-        return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
-
-    # if user.group_id != int(asked_group):
-    #     return {'message': "Wrong user group!"}
-
-    if check_password_hash(result.password, auth.password):
-        token = jwt.encode({
-                            'id': str(result.id),
-                            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
-                            },
-                           app.config['SECRET_KEY'])
-
-        return {'token': token.decode('UTF-8')}
-
-    return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
