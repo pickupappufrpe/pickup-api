@@ -1,7 +1,8 @@
 from . import booking
 
 from flask import request
-from core import token_required, Booking, Spot, Lineup, Player, Person, User
+from controllers import token_required
+from models import User, Person, Spot, Booking, Player, Lineup
 from .controls import add_booking_query
 
 

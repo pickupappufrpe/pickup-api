@@ -1,6 +1,7 @@
 from flask import request
 
-from core import token_required, Team, db, User, Person
+from controllers import token_required
+from models import db, User, Person, Team
 from . import team
 
 

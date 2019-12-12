@@ -1,4 +1,5 @@
-from core import State, City, token_required
+from controllers import token_required
+from models import State, City
 from . import address
 
 

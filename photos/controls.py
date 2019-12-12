@@ -3,7 +3,7 @@ import uuid
 
 import boto3
 
-from core import db, Photo
+from models import db, Photo
 
 S3_KEY = os.environ.get('KEY_ID')
 S3_SECRET = os.environ.get('ACCESS_KEY')

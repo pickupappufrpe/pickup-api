@@ -1,6 +1,7 @@
 from flask import request
 
-from core import db, Player, User, Person, PlayerInvite, token_required, Lineup, Booking, Spot
+from controllers import token_required
+from models import db, User, Person, Spot, Booking, Player, Lineup, PlayerInvite
 from . import player
 
 

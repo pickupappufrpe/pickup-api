@@ -1,4 +1,4 @@
-from core import db, Booking, Player, Lineup
+from models import db, Booking, Player, Lineup
 
 
 def add_booking_query(spot_id, day, start_time, end_time, customer_id, user):

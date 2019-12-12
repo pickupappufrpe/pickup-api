@@ -1,7 +1,7 @@
 from . import schedule
 
 from flask import request
-from core import token_required
+from controllers import token_required
 from .controls import add_schedule_query
 
 

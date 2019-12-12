@@ -1,4 +1,4 @@
-from core import db, Address, Contact, Spot, Ground, Schedule, City, State, Photo
+from models import db, Contact, Address, Spot, Ground, State, City, Photo, Schedule
 
 
 def create_address_query(city_id, street, cep, number, neighborhood):

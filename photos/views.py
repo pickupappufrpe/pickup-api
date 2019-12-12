@@ -3,7 +3,8 @@ import os
 import boto3
 from flask import request, Response
 
-from core import Photo, token_required
+from controllers import token_required
+from models import Photo
 from photos.controls import save_photo
 from . import photo
 

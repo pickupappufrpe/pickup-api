@@ -1,4 +1,4 @@
-from core import db, Schedule
+from models import db, Schedule
 
 
 def add_schedule_query(spot_id, week_day, opening_time, closing_time):

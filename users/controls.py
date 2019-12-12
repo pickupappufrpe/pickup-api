@@ -1,4 +1,4 @@
-from core import db, User, Person, Player, Referee
+from models import db, User, Person, Player, Referee
 from werkzeug.security import generate_password_hash
 
 

@@ -1,4 +1,5 @@
 from . import group
 
 from flask import request
-from core import Group, User, db, token_required
+from controllers import token_required
+from models import db, User, Group

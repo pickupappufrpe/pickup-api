@@ -1,7 +1,8 @@
 from . import match
 
 from flask import request
-from core import db, Match, Team, token_required
+from controllers import token_required
+from models import db, Team, Match
 
 
 @match.route('/match', methods=['POST'])

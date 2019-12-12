@@ -1,6 +1,7 @@
 from flask import request
 
-from core import Spot, token_required, SpotRating, db
+from controllers import token_required
+from models import db, Spot, SpotRating
 from . import spot
 from .controls import create_address_query, create_contact_query, create_spot_query, render_spot_group, render_spot
 
