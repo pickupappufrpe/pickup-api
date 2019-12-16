@@ -3,7 +3,7 @@ from functools import wraps
 import jwt
 from flask import request
 
-from core import app
+from app import app
 from models import User
 
 

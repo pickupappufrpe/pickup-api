@@ -1,6 +1,6 @@
 from unittest import TestCase
 from flask import url_for
-from core import app
+from app import app
 import jwt
 import string
 import random

@@ -5,7 +5,7 @@ from flask import request, make_response
 from werkzeug.security import check_password_hash
 
 from controllers import token_required
-from core import app
+from app import app
 from models import db, User
 from . import user
 from .controls import signup_query, get_user_by_id_query
