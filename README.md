@@ -31,7 +31,7 @@ método | endpoint | request | obs:
 método | endpoint | request | obs:
 ------------ | ------------- | ------------- | -------------
 **get_all_states** | /state | GET | 
-**get_city_by_state** | /state/<state_id>/city | GET |
+**get_state_cities** | /state/<state_id>/cities | GET |
 
 #### bookings:
 método | endpoint | request | obs:
@@ -43,9 +43,9 @@ método | endpoint | request | obs:
 método | endpoint | request | obs:
 ------------ | ------------- | ------------- | -------------
 **upload_spot_photo** | /spot/<spot_id>/photo | POST | form-data com key **file**
-**upload_user_photo** | /user/<spot_id>/photo | POST | form-data com key **file**
+**upload_user_photo** | /user/<user_id>/photo | POST | form-data com key **file**
 **get_spot_photo_list** | /spot/<spot_id>/photo/list | GET |
-**get_user_photo_list** | /user/<spot_id>/photo/list | GET |
+**get_user_photo_list** | /user/<user_id>/photo/list | GET |
 **get_photo_by_filename** | /photo/<filename> | GET |
 
 #### schedules:
