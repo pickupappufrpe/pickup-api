@@ -51,7 +51,7 @@ def get_user_by_id_query(user_id):
     # TODO: incluir contato na query
     if not target:
         return {'message': 'Sorry!'}
-    print(type(target))
+
     return target
 
 
