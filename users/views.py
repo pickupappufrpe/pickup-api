@@ -30,17 +30,14 @@ def signup():
 @user.route('/login', methods=['GET'])
 def login():
     auth = request.authorization
-    asked_group = request.args.get("user_group")
+
     if not auth or not auth.username or not auth.password:
         return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
 
-    result = User.query.filter_by(username=auth.username, group_id= asked_group).first()
+    result = User.query.filter_by(username=auth.username).first()
 
     if not result:
         return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
-
-    # if user.group_id != int(asked_group):
-    #     return {'message': "Wrong user group!"}
 
     if check_password_hash(result.password, auth.password):
         token = jwt.encode({
@@ -58,13 +55,11 @@ def login():
 @token_required
 def get_user_by_id(current_user, user_id):
     target = get_user_by_id_query(user_id)
-    print(type(target))
 
     return {'username': target.username,
             'name': target.name,
             'surname': target.surname,
-            'group_id': target.group_id
-            }
+            'group_id': target.group_id}
 
 
 @user.route('/user/username/<username>', methods=['GET'])
@@ -80,8 +75,7 @@ def get_user_by_username(username):
             'username': target.username,
             'group_id': target.group_id,
             'person_id': target.person_id,
-            'contact_id': target.contact_id
-            }
+            'contact_id': target.contact_id}
 
 
 @user.route('/user/<user_id>', methods=['DELETE'])
