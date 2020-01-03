@@ -65,7 +65,6 @@ def get_user_by_id(current_user, user_id):
 @user.route('/user/username/<username>', methods=['GET'])
 @token_required
 def get_user_by_username(username):
-    username = str(username)
     target = User.query.filter_by(username=username).first()
 
     if not target:
