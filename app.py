@@ -15,7 +15,7 @@ db = SQLAlchemy(app)
 
 @app.route('/')
 def hello_world():
-    return 'Hello, World!'
+    return 'PickUp API'
 
 
 from users import user as user_bp
