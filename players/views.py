@@ -3,6 +3,7 @@ from flask import request
 from controllers import token_required
 from models import db, User, Person, Spot, Booking, Player, Lineup, PlayerInvite
 from . import player
+from .controls import my_invites
 
 
 @player.route('/players', methods=['GET'])
@@ -48,24 +49,18 @@ def invite_player(current_user):
 @player.route('/players/invites/guest', methods=['GET'])
 @token_required
 def get_my_invites(current_user):  # Return invites sent to the logged player.
-    target = Player.query.filter_by(user_id=current_user.id).first()
-    invites = PlayerInvite.query.filter_by(guest_id=target.player_id)
 
     output = []
 
-    for i in invites:
-        booking = Booking.query.filter_by(booking_id=i.booking_id).first()
-        spot = Spot.query.filter_by(id=booking.spot_id).first()
-        host_player = Player.query.filter_by(player_id = i.host_id).first()
-        host_user = User.query.filter_by(id=host_player.user_id).first()
-        host_person = Person.query.filter_by(id=host_user.person_id).first()  # TODO: refactor queries
-        invite_data = {'booking_id': i.booking_id,
-                       'spot_name': spot.name,
-                       'spot_id':spot.id,
-                       'status': i.status,
-                       'invite_id': i.playerinvite_id,
-                       'guest_id': i.guest_id,
-                       'host_name': f'{host_person.name} {host_person.surname}'
+    for invite in my_invites(current_user.id):
+
+        invite_data = {'booking_id': invite.booking_id,
+                       'spot_name': invite.spot_name,
+                       'spot_id': invite.spot_id,
+                       'status': invite.status,
+                       'invite_id': invite.playerinvite_id,
+                       'guest_id': invite.guest_id,
+                       'host_name': f'{invite.host_name} {invite.host_surname}'
                        }
         output.append(invite_data)
 
